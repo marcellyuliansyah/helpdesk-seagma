@@ -46,4 +46,19 @@ class TeknisiController extends Controller
 
         return redirect()->route('teknisi.dashboard')->with('success', 'Berhasil! Tiket masuk ke daftar tugas Anda.');
     }
+    
+    // Fungsi untuk menyelesaikan tiket
+    public function selesaikanTiket($id)
+    {
+        // Cari tiket yang ID-nya cocok dan pastikan tiket ini memang dipegang oleh teknisi yang sedang login
+        $tiket = Tiket::where('id', $id)
+                      ->where('teknisi_id', Auth::id())
+                      ->firstOrFail();
+
+        // Ubah status menjadi selesai
+        $tiket->status = 'selesai';
+        $tiket->save();
+
+        return redirect()->route('teknisi.dashboard')->with('success', 'Kerja bagus! Laporan telah berhasil diselesaikan.');
+    }
 }

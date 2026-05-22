@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tiket; // Memanggil model Tiket
 use Illuminate\Support\Facades\Auth;
+use App\Models\Kategori;
 
 class TiketController extends Controller
 {
@@ -22,6 +23,16 @@ class TiketController extends Controller
         // 3. Jika gagal (misal status sudah diproses), tolak pembatalan
         return redirect()->route('pelanggan.dashboard')->with('error', 'Maaf, pengaduan tidak dapat dibatalkan karena sudah diproses oleh teknisi.');
     }
+
+    public function create()
+    {
+        // Mengambil semua kategori untuk pilihan dropdown pelanggan
+        $semuaKategori = Kategori::all(); 
+        
+        // Sesuaikan 'create-tiket' dengan nama file blade form pelanggan Anda
+        return view('pengaduan-create', compact('semuaKategori')); 
+    }
+
     // Fungsi untuk menyimpan data ke database
     public function store(Request $request)
     {
@@ -30,6 +41,7 @@ class TiketController extends Controller
             'deskripsi' => 'required|string',
             'latitude' => 'required',
             'longitude' => 'required',
+            'kategori_id' => 'required|exists:kategoris,id',
         ]);
 
         Tiket::create([
@@ -39,6 +51,7 @@ class TiketController extends Controller
             'status' => 'menunggu verifikasi',
             'latitude' => $request->latitude,   // Simpan Latitude
             'longitude' => $request->longitude, // Simpan Longitude
+            'kategori_id' => $request->kategori_id,
         ]);
 
         return redirect()->route('pelanggan.dashboard')->with('success', 'Tiket berhasil dikirim!');

@@ -33,12 +33,14 @@ class AuthenticatedSessionController extends Controller
         // Cek role setelah berhasil login
         $role = $request->user()->role;
 
-        if ($role === 'admin') {
+        if ($role === 'pimpinan') {
+            return redirect('/pimpinan/dashboard');
+        } elseif ($role === 'admin') {
             return redirect('/admin/dashboard');
         } elseif ($role === 'teknisi') {
             return redirect('/teknisi/dashboard');
         } else {
-            // Jika bukan admin dan bukan teknisi, berarti dia Pelanggan (user)
+            // Jika bukan pimpinan, admin, dan teknisi, maka dia Pelanggan (user)
             return redirect('/pelanggan/dashboard');
         }
     }

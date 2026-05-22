@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,153 +7,211 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Slab:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        /* Mengatur font default untuk seluruh halaman menjadi sangat formal */
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
         }
-        /* Mengatur font khusus yang tegas dan kokoh untuk nama perusahaan & judul */
         .font-tegas {
-            font-family: 'Roboto Slab', serif;
+            font-family: 'Poppins', sans-serif;
+        }
+        /* Efek garis grid yang lebih lembut */
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, #f8f9fa 1px, transparent 1px), linear-gradient(to bottom, #f8f9fa 1px, transparent 1px);
+            background-size: 3rem 3rem;
         }
     </style>
 </head>
-<body class="antialiased bg-gray-50 text-gray-900">
+<body class="antialiased text-gray-800 selection:bg-red-600 selection:text-white relative">
 
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20">
-                <div class="flex items-center">
+    <div class="absolute inset-x-0 top-0 z-[-1] h-[90vh] bg-grid-pattern overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/80 to-white"></div>
+        
+        <div class="absolute -top-24 right-[-5%] w-[600px] h-[600px] rounded-full bg-gradient-to-bl from-red-300/40 to-orange-200/20 blur-[90px] pointer-events-none"></div>
+        
+        <div class="absolute top-[10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-gray-300/40 to-red-100/30 blur-[90px] pointer-events-none"></div>
+    </div>
+
+    <nav x-data="{ mobileMenuOpen: false }" class="bg-white/70 backdrop-blur-md border-b border-gray-100/50 sticky top-0 z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20 items-center">
+            
+            <div class="flex items-center min-w-0 flex-1 sm:flex-none">
+                <a href="#" class="flex items-center gap-2 sm:gap-3 group min-w-0">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-auto sm:h-10 object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300 shrink-0">
                     
-                    <div class="flex-shrink-0 flex items-center gap-4">
-                        <img src="{{ asset('images/logo.png') }}" alt="Logo Perusahaan" class="h-12 w-auto object-contain">
-                        
-                        <span class="text-2xl font-extrabold text-gray-800 font-tegas tracking-tight uppercase">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:gap-2 min-w-0">
+                        <span class="text-sm sm:text-base md:text-lg font-bold text-gray-900 tracking-tight font-tegas truncate">
                             PT. SEAGMA
                         </span>
-                        
-                        <div class="w-px h-8 bg-gray-300 hidden sm:block"></div>
-                        
-                        <span class="text-2x1 font-bold text-red-600 tracking-wider uppercase hidden sm:block">
-                            Mitra Resmi Telkom
+                        <span class="hidden md:inline text-xs md:text-sm font-medium text-gray-400 border-l border-gray-200 pl-2 font-mono tracking-wider uppercase">
+                            Mitra Telkom
                         </span>
                     </div>
-
-                </div>
-
-                <div class="flex items-center gap-3">
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="text-sm font-bold text-gray-700 hover:text-red-600 transition uppercase">Ke Dashboard</a>
-                        @else
-                            <a href="{{ route('login') }}" class="px-5 py-2.5 text-sm font-bold text-gray-700 bg-white border border-gray-300 rounded shadow-sm hover:bg-gray-50 hover:border-red-300 transition uppercase">Log in</a>
-                            
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="px-5 py-2.5 text-sm font-bold text-white bg-red-600 rounded shadow-sm hover:bg-red-700 transition uppercase">Register</a>
-                            @endif
-                        @endauth
-                    @endif
-                </div>
+                </a>
             </div>
-        </div>
-    </nav>
 
-    <div class="relative bg-white overflow-hidden border-b border-gray-200">
-        <div class="max-w-7xl mx-auto">
-            <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-10">
-                
-                <svg class="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <polygon points="50,0 100,0 100,100 0,100" />
-                </svg>
+            @if (Route::has('login'))
+                <div class="hidden sm:flex sm:items-center sm:gap-4 shrink-0">
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-4 py-2 border border-gray-100 rounded-xl text-xs font-semibold uppercase tracking-widest text-gray-600 bg-white/80 hover:bg-gray-50 hover:text-gray-900 shadow-sm transition-all duration-300">
+                            Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="text-xs font-semibold uppercase tracking-widest text-gray-600 hover:text-gray-900 transition-colors py-2 px-3">
+                            Log in
+                        </a>
 
-                <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-                    <div class="sm:text-center lg:text-left">
-                        <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl font-tegas uppercase">
-                            <span class="block xl:inline">Infrastruktur &</span>
-                            <span class="block text-red-600 xl:inline">Dukungan Teknis</span>
-                        </h1>
-                        <p class="mt-3 text-base text-gray-600 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto lg:mx-0 md:mt-5 md:text-xl leading-relaxed">
-                            Portal Helpdesk Resmi untuk pelaporan gangguan dan koordinasi teknis. Kami berkomitmen menjaga keandalan jaringan secara profesional dan responsif.
-                        </p>
-                        <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                            <div class="rounded shadow-sm">
-                                <a href="{{ route('login') }}" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-bold rounded text-white bg-red-600 hover:bg-red-700 md:py-4 md:text-lg md:px-10 transition duration-200 uppercase tracking-wide">
-                                    Akses Portal Bantuan
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </main>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="inline-flex items-center px-5 py-2.5 bg-gray-950 hover:bg-red-600 text-white text-xs font-bold uppercase tracking-widest rounded-xl shadow-md transition-all duration-300 transform hover:-translate-y-0.5">
+                                Register
+                            </a>
+                        @endif
+                    @endauth
+                </div>
+            @endif
+
+            <div class="flex items-center sm:hidden shrink-0 ml-4">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="inline-flex items-center justify-center p-2.5 rounded-xl text-gray-500 hover:text-gray-900 bg-gray-50/80 border border-gray-100/80 focus:outline-none transition-all duration-200">
+                    <svg class="h-5 w-5" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                        <path :class="{'hidden': mobileMenuOpen, 'inline-flex': !mobileMenuOpen }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{'hidden': !mobileMenuOpen, 'inline-flex': mobileMenuOpen }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
-        </div>
-        
-        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=2070&auto=format&fit=crop" alt="Network Technology">
+
         </div>
     </div>
 
-    <div class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="lg:text-center">
-                <h2 class="text-base text-red-600 font-bold tracking-widest uppercase">Layanan Teknis</h2>
-                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl font-tegas uppercase">
-                    Prioritas Penanganan
-                </p>
-                <p class="mt-4 max-w-2xl text-lg text-gray-600 lg:mx-auto">
-                    Sistem pelaporan terpusat untuk memastikan setiap kendala tertangani dengan standar operasional prosedur yang ketat.
-                </p>
+    <div x-show="mobileMenuOpen"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 -translate-y-4"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 -translate-y-4"
+         class="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-2xl px-5 py-4 space-y-2 sm:hidden z-50"
+         style="display: none;">
+        
+        @if (Route::has('login'))
+            <div class="flex flex-col gap-2 pt-2">
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="w-full text-center px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-700 bg-gray-50 hover:bg-gray-100 transition-all">
+                        Masuk ke Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="w-full text-center px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-600 bg-gray-50 hover:bg-gray-100 transition-all">
+                        Log in
+                    </a>
+
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="w-full text-center px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-white bg-gray-950 hover:bg-red-600 transition-all">
+                            Register Baru
+                        </a>
+                    @endif
+                @endauth
+            </div>
+        @endif
+    </nav>
+
+    <main class="relative px-6 lg:px-8 flex flex-col items-center justify-start text-center pt-16 pb-10">
+        <div class="mx-auto max-w-4xl pt-8 sm:pt-12">
+            
+            <div class="hidden sm:mb-8 sm:flex sm:justify-center">
+                <div class="relative rounded-full px-4 py-1.5 text-sm leading-6 text-gray-600 ring-1 ring-gray-200/80 bg-white/60 backdrop-blur-sm hover:ring-red-600/30 hover:bg-red-50 transition-all duration-300 shadow-sm">
+                    Portal Bantuan Teknis Resmi. <a href="{{ route('login') }}" class="font-semibold text-red-600"><span class="absolute inset-0" aria-hidden="true"></span>Akses sekarang <span aria-hidden="true">&rarr;</span></a>
+                </div>
             </div>
 
-            <div class="mt-12">
-                <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-10 md:gap-y-12">
-                    <div class="relative bg-white p-8 rounded shadow-sm border border-gray-200">
-                        <dt>
-                            <div class="absolute flex items-center justify-center h-14 w-14 rounded bg-red-600 text-white">
-                                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
-                            </div>
-                            <p class="ml-20 text-xl leading-6 font-bold text-gray-900 font-tegas">PELAPORAN CEPAT</p>
+            <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-6xl font-tegas leading-tight">
+                Infrastruktur <span class="font-light text-gray-300">/</span> <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-red-700 to-red-500">
+                    Dukungan Teknis
+                </span>
+            </h1>
+            
+            <div class="mt-8 flex items-center justify-center gap-x-6">
+                <a href="{{ route('login') }}" class="rounded-full bg-gray-900 px-8 py-3.5 text-sm font-semibold text-white shadow-md hover:bg-red-600 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    Buat Laporan Tiket
+                </a>
+                <a href="#layanan" class="text-sm font-semibold leading-6 text-gray-600 hover:text-red-600 transition-colors duration-200">
+                    Pelajari Prosedur <span aria-hidden="true">↓</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div id="layanan" class="py-12 sm:py-16 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="mx-auto max-w-2xl lg:text-center">
+                <h2 class="text-xs font-bold leading-7 text-red-600 tracking-widest uppercase">Standar Operasional</h2>
+                <p class="mt-1 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl font-tegas">Prioritas Penanganan</p>
+            </div>
+
+            <div class="mx-auto mt-10 max-w-2xl sm:mt-12 lg:max-w-none">
+                <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-3">
+                    
+                    <div class="flex flex-col items-start bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 hover:border-red-100 hover:shadow-xl hover:shadow-red-500/5 transition-all duration-300 group shadow-sm">
+                        <div class="rounded-2xl bg-gray-50 p-3 ring-1 ring-gray-100 group-hover:bg-red-50 group-hover:ring-red-100 transition-colors duration-300 mb-5">
+                            <svg class="h-6 w-6 text-gray-700 group-hover:text-red-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                            </svg>
+                        </div>
+                        <dt class="text-lg font-semibold leading-7 text-gray-900 font-tegas">
+                            Pelaporan Cepat
                         </dt>
-                        <dd class="mt-4 ml-20 text-base text-gray-600 leading-relaxed">
-                            Pembuatan tiket laporan gangguan secara sistematis untuk pencatatan dan respons yang lebih cepat.
+                        <dd class="mt-2 flex flex-auto flex-col text-sm sm:text-base leading-7 text-gray-500 font-light">
+                            <p class="flex-auto">Pembuatan tiket laporan gangguan secara sistematis untuk pencatatan dan respons waktu-nyata.</p>
                         </dd>
                     </div>
 
-                    <div class="relative bg-white p-8 rounded shadow-sm border border-gray-200">
-                        <dt>
-                            <div class="absolute flex items-center justify-center h-14 w-14 rounded bg-red-600 text-white">
-                                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            </div>
-                            <p class="ml-20 text-xl leading-6 font-bold text-gray-900 font-tegas">PEMANTAUAN STATUS</p>
+                    <div class="flex flex-col items-start bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 hover:border-red-100 hover:shadow-xl hover:shadow-red-500/5 transition-all duration-300 group shadow-sm">
+                        <div class="rounded-2xl bg-gray-50 p-3 ring-1 ring-gray-100 group-hover:bg-red-50 group-hover:ring-red-100 transition-colors duration-300 mb-5">
+                            <svg class="h-6 w-6 text-gray-700 group-hover:text-red-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zm-7.518-.267A8.25 8.25 0 1120.25 10.5M8.288 14.212A5.25 5.25 0 1117.25 10.5" />
+                            </svg>
+                        </div>
+                        <dt class="text-lg font-semibold leading-7 text-gray-900 font-tegas">
+                            Pemantauan Status
                         </dt>
-                        <dd class="mt-4 ml-20 text-base text-gray-600 leading-relaxed">
-                            Lacak progres penanganan masalah secara transparan, mulai dari penerimaan laporan hingga resolusi.
+                        <dd class="mt-2 flex flex-auto flex-col text-sm sm:text-base leading-7 text-gray-500 font-light">
+                            <p class="flex-auto">Lacak progres penanganan masalah secara transparan, mulai dari penerimaan laporan hingga resolusi akhir.</p>
                         </dd>
                     </div>
 
-                    <div class="relative bg-white p-8 rounded shadow-sm border border-gray-200">
-                        <dt>
-                            <div class="absolute flex items-center justify-center h-14 w-14 rounded bg-red-600 text-white">
-                                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                            </div>
-                            <p class="ml-20 text-xl leading-6 font-bold text-gray-900 font-tegas">TEKNISI SERTIFIKASI</p>
+                    <div class="flex flex-col items-start bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 hover:border-red-100 hover:shadow-xl hover:shadow-red-500/5 transition-all duration-300 group shadow-sm">
+                        <div class="rounded-2xl bg-gray-50 p-3 ring-1 ring-gray-100 group-hover:bg-red-50 group-hover:ring-red-100 transition-colors duration-300 mb-5">
+                            <svg class="h-6 w-6 text-gray-700 group-hover:text-red-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                            </svg>
+                        </div>
+                        <dt class="text-lg font-semibold leading-7 text-gray-900 font-tegas">
+                            Teknisi Sertifikasi
                         </dt>
-                        <dd class="mt-4 ml-20 text-base text-gray-600 leading-relaxed">
-                            Penugasan teknisi lapangan yang kompeten dan bersertifikasi untuk menjamin kualitas perbaikan.
+                        <dd class="mt-2 flex flex-auto flex-col text-sm sm:text-base leading-7 text-gray-500 font-light">
+                            <p class="flex-auto">Penugasan teknisi lapangan yang kompeten dan tersertifikasi untuk menjamin kualitas perbaikan infrastruktur.</p>
                         </dd>
                     </div>
+
                 </dl>
             </div>
         </div>
     </div>
 
-    <footer class="bg-gray-900 text-gray-400">
-        <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 text-center border-t border-gray-800">
-            <p class="text-sm tracking-wide font-bold uppercase">© {{ date('Y') }} PT Semeru Agung Mandiri</p>
-            <p class="text-xs mt-2">Mitra Resmi PT Telkom Indonesia. All rights reserved.</p>
+    <footer class="bg-white border-t border-gray-100 mt-4">
+        <div class="max-w-7xl mx-auto py-8 px-6 md:flex md:items-center md:justify-between lg:px-8">
+            <div class="flex justify-center md:order-2 space-x-6">
+                <span class="text-xs font-medium tracking-widest text-gray-400 uppercase">Mitra Resmi PT Telkom Indonesia</span>
+            </div>
+            <div class="mt-4 md:order-1 md:mt-0">
+                <p class="text-center text-xs leading-5 text-gray-500 font-light">
+                    &copy; {{ date('Y') }} PT Semeru Agung Mandiri. All rights reserved.
+                </p>
+            </div>
         </div>
     </footer>
 

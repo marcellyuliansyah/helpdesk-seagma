@@ -1,118 +1,161 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-bold text-xl text-gray-800 leading-tight uppercase tracking-wide">
-            {{ __('Form Pengaduan Gangguan') }}
-        </h2>
-    </x-slot>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap');
+        
+        .font-tegas { font-family: 'Poppins', sans-serif; }
+        body { font-family: 'Inter', sans-serif; }
+
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, #f1f5f9 1px, transparent 1px), linear-gradient(to bottom, #f1f5f9 1px, transparent 1px);
+            background-size: 3rem 3rem;
+        }
+    </style>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <div class="py-12 bg-gray-50 min-h-screen">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-sm border border-gray-200">
-                <div class="p-6 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-                    <div>
-                        <h3 class="text-lg font-bold uppercase tracking-wide text-gray-800">Tiket Baru</h3>
-                        <p class="text-sm text-gray-500 mt-1">Lengkapi data di bawah ini dengan akurat agar teknisi dapat menemukan lokasi Anda.</p>
-                    </div>
-                    <a href="{{ url('/pelanggan/dashboard') }}" class="text-sm font-bold text-gray-500 hover:text-red-600 uppercase transition tracking-wider">
-                        &larr; Kembali
-                    </a>
-                </div>
+    <div class="relative min-h-screen bg-white pb-16">
+        <div class="fixed inset-0 z-0 bg-grid-pattern opacity-40"></div>
+        <div class="fixed top-[-10%] right-[-10%] w-[600px] h-[600px] bg-red-50/40 rounded-full blur-[130px] z-0 pointer-events-none"></div>
 
-                <div class="p-6 md:p-8">
-                    @if ($errors->any())
-                        <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-sm relative shadow-sm" role="alert">
-                            <strong class="font-bold uppercase tracking-wide text-xs">Gagal Mengirim Tiket!</strong>
-                            <ul class="mt-2 list-disc list-inside text-sm">
+        <div class="relative z-10">
+            <div class="max-w-3xl mx-auto pt-12 px-4 sm:px-6 flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight text-gray-950 font-tegas">
+                        Buat Pengaduan
+                    </h2>
+                    <p class="text-xs text-gray-400 mt-1 font-light tracking-wide">Layanan dukungan teknis infrastruktur PT Seagma.</p>
+                </div>
+                <a href="{{ url('/pelanggan/dashboard') }}" class="text-xs font-semibold tracking-widest text-gray-400 hover:text-gray-900 transition-colors duration-300 flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    DASHBOARD
+                </a>
+            </div>
+
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 mt-10">
+                
+                @if ($errors->any())
+                    <div class="mb-8 bg-red-50/60 backdrop-blur-sm border border-red-100 rounded-2xl p-5 flex items-start gap-4">
+                        <div class="text-red-500 mt-0.5 shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-900 font-tegas">Verifikasi Formulir Gagal</h4>
+                            <ul class="mt-1 list-disc list-inside text-xs text-gray-500 space-y-1 font-light">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
                             </ul>
                         </div>
-                    @endif
-                    <form action="{{ route('pengaduan.store') }}" method="POST">
-                        @csrf
+                    </div>
+                @endif
+
+                <form action="{{ route('pengaduan.store') }}" method="POST" class="space-y-10">
+                    @csrf
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-gray-100">
+                        <div>
+                            <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 font-tegas">01. Pelapor</h3>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <div class="text-base font-semibold text-gray-900 font-tegas tracking-wide uppercase">{{ Auth::user()->name }}</div>
+                            <div class="text-xs text-gray-400 font-light mt-0.5">{{ Auth::user()->email }}</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-gray-100">
+                        <div>
+                            <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 font-tegas">02. Detail Masalah</h3>
+                            <p class="text-[11px] text-gray-400 font-light mt-2 pr-4 leading-relaxed">Berikan informasi singkat dan deskripsi mendalam mengenai kendala jaringan yang terjadi.</p>
+                        </div>
                         
-                        <div class="mb-6 bg-gray-50 p-4 border border-gray-200 rounded-sm">
-                            <label class="block font-bold text-xs text-gray-500 uppercase tracking-wide mb-2">Pelapor (Otomatis)</label>
-                            <div class="font-bold text-gray-900 uppercase">{{ Auth::user()->name }}</div>
-                            <div class="text-sm text-gray-600">{{ Auth::user()->email }}</div>
-                        </div>
+                        <div class="sm:col-span-2 space-y-6">
+                            <div>
+                                <label for="judul" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Judul Keluhan Singkat</label>
+                                <input type="text" id="judul" name="judul" required placeholder="Misal: Koneksi Lambat / Lampu Indikator Merah"
+                                    class="block w-full rounded-xl border-0 py-3.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-100 placeholder:text-gray-300 focus:ring-1 focus:ring-inset focus:ring-gray-900 bg-gray-50/30 sm:text-sm transition-all duration-300 outline-none">
+                            </div>
 
-                        <div class="mb-6">
-                            <label for="judul" class="block font-bold text-xs text-gray-700 uppercase tracking-wide mb-2">Judul / Kategori Gangguan <span class="text-red-600">*</span></label>
-                            <input type="text" id="judul" name="judul" class="block w-full border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-sm shadow-sm transition text-sm" placeholder="Contoh: Internet Mati Total" required>
-                        </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Kategori Gangguan</label>
+                                <select name="kategori_id" required
+                                    class="block w-full rounded-xl border-0 py-3.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-100 focus:ring-1 focus:ring-inset focus:ring-gray-900 bg-gray-50/30 sm:text-sm transition-all duration-300 outline-none appearance-none">
+                                    <option value="" disabled selected class="text-gray-300">Pilih rumpun masalah...</option>
+                                    @foreach($semuaKategori as $kat)
+                                        <option value="{{ $kat->id }}">{{ $kat->nama_kategori }}</option>
+                                    @endforeach
+                                </select>
+                                @error('kategori_id')
+                                    <p class="text-red-500 text-xs mt-1.5 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                        <div class="mb-6">
-                            <label for="deskripsi" class="block font-bold text-xs text-gray-700 uppercase tracking-wide mb-2">Deskripsi Gangguan Wi-Fi <span class="text-red-600">*</span></label>
-                            <textarea id="deskripsi" name="deskripsi" rows="4" class="block w-full border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-sm shadow-sm transition text-sm" placeholder="Contoh: Lampu LOS pada modem berwarna merah dan internet tidak bisa diakses sejak pagi..." required></textarea>
+                            <div>
+                                <label for="deskripsi" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Deskripsi Lengkap Kronologi</label>
+                                <textarea id="deskripsi" name="deskripsi" rows="4" required placeholder="Tuliskan detail kendala secara kronologis di sini..."
+                                    class="block w-full rounded-xl border-0 py-3.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-100 placeholder:text-gray-300 focus:ring-1 focus:ring-inset focus:ring-gray-900 bg-gray-50/30 sm:text-sm transition-all duration-300 outline-none resize-none"></textarea>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="mb-6">
-                            <label class="block font-bold text-xs text-gray-700 uppercase tracking-wide mb-2">Tandai Titik Lokasi Rumah / Perangkat <span class="text-red-600">*</span></label>
-                            <p class="text-xs text-gray-500 mb-3">Geser pin merah pada peta di bawah ini ke lokasi persis rumah Anda.</p>
-                            
-                            <div id="map" class="h-80 w-full rounded-sm border border-gray-300 shadow-sm mb-3 z-0"></div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-gray-100">
+                        <div>
+                            <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 font-tegas">03. Geolokasi</h3>
+                            <p class="text-[11px] text-gray-400 font-light mt-2 pr-4 leading-relaxed">Geser pin merah tepat di atas posisi hunian Anda untuk rute penugasan tim lapangan.</p>
+                        </div>
+                        
+                        <div class="sm:col-span-2 space-y-4">
+                            <div class="relative rounded-[2rem] overflow-hidden shadow-2xl shadow-gray-200/60 bg-gray-50 z-0 border border-gray-100/50">
+                                <div id="map" class="h-72 w-full"></div>
+                            </div>
 
                             <div class="flex gap-4">
-                                <div class="w-1/2">
-                                    <label class="block font-bold text-[10px] text-gray-500 uppercase tracking-wide mb-1">Latitude</label>
-                                    <input type="text" id="latitude" name="latitude" class="block w-full border-gray-300 bg-gray-50 rounded-sm shadow-sm text-sm" readonly required>
+                                <div class="w-1/2 flex items-center gap-2 bg-gray-50/50 px-4 py-2.5 rounded-xl border border-gray-100">
+                                    <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider font-mono">LAT:</span>
+                                    <input type="text" id="latitude" name="latitude" readonly required class="w-full bg-transparent border-0 p-0 text-xs font-mono text-gray-600 outline-none pointer-events-none">
                                 </div>
-                                <div class="w-1/2">
-                                    <label class="block font-bold text-[10px] text-gray-500 uppercase tracking-wide mb-1">Longitude</label>
-                                    <input type="text" id="longitude" name="longitude" class="block w-full border-gray-300 bg-gray-50 rounded-sm shadow-sm text-sm" readonly required>
+                                <div class="w-1/2 flex items-center gap-2 bg-gray-50/50 px-4 py-2.5 rounded-xl border border-gray-100">
+                                    <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider font-mono">LNG:</span>
+                                    <input type="text" id="longitude" name="longitude" readonly required class="w-full bg-transparent border-0 p-0 text-xs font-mono text-gray-600 outline-none pointer-events-none">
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <hr class="border-gray-200 my-8">
+                    <div class="pt-8 border-t border-gray-100 flex justify-end">
+                        <button type="submit" class="w-full sm:w-auto px-10 py-4 bg-gray-950 hover:bg-red-600 text-white text-xs font-bold uppercase tracking-[0.2em] rounded-full shadow-xl shadow-gray-900/10 hover:shadow-red-500/20 transition-all duration-300 transform hover:-translate-y-1">
+                            Kirim Tiket Gangguan
+                        </button>
+                    </div>
+                </form>
 
-                        <div class="flex justify-end">
-                            <button type="submit" class="inline-flex items-center px-8 py-3 bg-red-600 border border-transparent rounded-sm font-bold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-800 transition shadow-sm">
-                                Kirim Laporan Gangguan
-                            </button>
-                        </div>
-                    </form>
-                </div>
             </div>
-
         </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Titik awal peta (Default: Alun-Alun Lumajang, Jawa Timur)
             var initialLat = -8.1332; 
             var initialLng = 113.2226;
 
-            // Inisialisasi Peta
-            var map = L.map('map').setView([initialLat, initialLng], 13);
+            var map = L.map('map', {zoomControl: false}).setView([initialLat, initialLng], 13);
+            L.control.zoom({position: 'topright'}).addTo(map);
 
-            // Tampilan Peta dari OpenStreetMap
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
+                attribution: '&copy; OpenStreetMap'
             }).addTo(map);
 
-            // Buat Pin (Marker) yang bisa digeser (draggable)
             var marker = L.marker([initialLat, initialLng], {draggable: true}).addTo(map);
 
-            // Masukkan koordinat awal ke dalam input text
             document.getElementById('latitude').value = initialLat;
             document.getElementById('longitude').value = initialLng;
 
-            // Jika pin digeser, update angka koordinatnya
             marker.on('dragend', function (e) {
                 var latLng = marker.getLatLng();
                 document.getElementById('latitude').value = latLng.lat;
                 document.getElementById('longitude').value = latLng.lng;
             });
 
-            // Jika peta diklik, pindahkan pin ke titik tersebut
             map.on('click', function(e) {
                 marker.setLatLng(e.latlng);
                 document.getElementById('latitude').value = e.latlng.lat;
