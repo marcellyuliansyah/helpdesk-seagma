@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Tiket;
 
 class User extends Authenticatable
 {
@@ -23,7 +24,9 @@ class User extends Authenticatable
         'password',
         'role',
         'no_telepon',
-        'alamat_lengkap'
+        'alamat_lengkap',
+        'latitude',
+        'longitude'
     ];
 
     /**
@@ -45,4 +48,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function tikets()
+    {
+        return $this->hasMany(Tiket::class, 'pelanggan_id');
+    }
+
+    public function tugasTeknisi()
+    {
+        return $this->hasMany(Tiket::class, 'teknisi_id');
+    }
 }

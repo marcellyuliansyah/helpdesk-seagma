@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tiket extends Model 
+class Tiket extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'pelanggan_id',
         'teknisi_id',
+        'kategori_id',
         'judul',
         'deskripsi',
         'status',
@@ -20,7 +21,7 @@ class Tiket extends Model
     ];
 
     // INI YANG HARUS DITAMBAHKAN: Relasi ke tabel users
-    public function user()
+    public function pelanggan()
     {
         return $this->belongsTo(User::class, 'pelanggan_id');
     }

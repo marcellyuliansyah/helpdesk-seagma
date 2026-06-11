@@ -76,7 +76,7 @@
                                     <div>
                                         <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Pelanggan</span>
                                         <h4 class="text-base font-bold text-gray-900 uppercase tracking-wide font-tegas">
-                                            {{ $tiket->user->name ?? 'User Tidak Ditemukan' }}
+                                            {{ $tiket->pelanggan->name ?? 'User Tidak Ditemukan' }}
                                         </h4>
                                         <span class="inline-block text-[10px] text-gray-500 font-mono bg-gray-100 px-2.5 py-1 rounded-md mt-1 border border-gray-200/60">
                                             #{{ $tiket->nomor_tiket }}
@@ -171,7 +171,7 @@
                         <div class="p-5 space-y-3">
                             <div class="flex justify-between items-center">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-900 uppercase tracking-wide font-tegas">{{ $tiket->user->name ?? 'User Tidak Ditemukan' }}</h4>
+                                    <h4 class="text-sm font-bold text-gray-900 uppercase tracking-wide font-tegas">{{ $tiket->pelanggan->name ?? 'User Tidak Ditemukan' }}</h4>
                                     <span class="text-[10px] text-gray-400 font-mono">#{{ $tiket->nomor_tiket }}</span>
                                 </div>
                                 <span class="text-[9px] text-gray-400 font-medium bg-gray-100 px-2 py-0.5 rounded-full">{{ $tiket->created_at->diffForHumans() }}</span>

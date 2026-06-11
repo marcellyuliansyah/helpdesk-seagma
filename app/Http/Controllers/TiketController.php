@@ -27,33 +27,37 @@ class TiketController extends Controller
     public function create()
     {
         // Mengambil semua kategori untuk pilihan dropdown pelanggan
-        $semuaKategori = Kategori::all(); 
-        
+        $semuaKategori = Kategori::all();
+
         // Sesuaikan 'create-tiket' dengan nama file blade form pelanggan Anda
-        return view('pengaduan-create', compact('semuaKategori')); 
+        return view('pengaduan-create', compact('semuaKategori'));
     }
 
     // Fungsi untuk menyimpan data ke database
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
-            'latitude' => 'required',
-            'longitude' => 'required',
-            'kategori_id' => 'required|exists:kategoris,id',
+            'judul' => 'required',
+            'deskripsi' => 'required',
+            'kategori_id' => 'required',
         ]);
+
+        $user = Auth::user();
 
         Tiket::create([
-            'pelanggan_id' => Auth::id(),
+            'pelanggan_id' => $user->id,
             'judul' => $request->judul,
             'deskripsi' => $request->deskripsi,
-            'status' => 'menunggu verifikasi',
-            'latitude' => $request->latitude,   // Simpan Latitude
-            'longitude' => $request->longitude, // Simpan Longitude
             'kategori_id' => $request->kategori_id,
+
+            'latitude' => $user->latitude,
+            'longitude' => $user->longitude,
+
+            'status' => 'menunggu verifikasi',
         ]);
 
-        return redirect()->route('pelanggan.dashboard')->with('success', 'Tiket berhasil dikirim!');
+        return redirect()
+            ->route('pelanggan.dashboard')
+            ->with('success', 'Pengaduan berhasil dikirim');
     }
 }

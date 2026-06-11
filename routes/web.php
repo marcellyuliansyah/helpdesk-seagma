@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TiketController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Tiket;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\SuperAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,10 +20,10 @@ Route::get('/', function () {
         if ($role === 'pelanggan') {
             return redirect('/pelanggan/dashboard');
         } elseif ($role === 'admin') {
-            return redirect('/admin/dashboard'); 
+            return redirect('/admin/dashboard');
         } elseif ($role === 'teknisi') {
             return redirect('/teknisi/dashboard');
-        } elseif ($role === 'pimpinan') { 
+        } elseif ($role === 'pimpinan') {
             return redirect('/pimpinan/dashboard');
         }
         return redirect('/dashboard');
@@ -31,7 +33,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $role = Auth::user()->role ?? 'user';
-    
+
     if ($role === 'pelanggan') {
         return redirect('/pelanggan/dashboard');
     } elseif ($role === 'admin') {
@@ -51,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // --- RUTE KHUSUS ADMIN ---
 Route::get('/admin/dashboard', [App\Http\Controllers\AdminController::class, 'index'])
@@ -67,10 +69,43 @@ Route::patch('/admin/pengaduan/{id}/status', [App\Http\Controllers\AdminControll
     ->middleware(['auth', 'admin', 'verified', 'no-cache'])
     ->name('admin.pengaduan.updateStatus');
 
-    Route::get('/admin/laporan/pdf', [App\Http\Controllers\AdminController::class, 'cetakPDF'])->name('admin.laporan.pdf');
+Route::patch(
+    '/admin/pengaduan/{id}/assign',
+    [App\Http\Controllers\AdminController::class, 'assignTeknisi']
+)
+    ->middleware(['auth', 'admin', 'verified', 'no-cache'])
+    ->name('admin.pengaduan.assign');
 
-    // --- RUTE MASTER DATA KATEGORI ---
-    // --- RUTE MASTER DATA KATEGORI ---
+Route::middleware([
+    'auth',
+    'admin',
+    'verified',
+    'no-cache'
+])->group(function () {
+
+    Route::get(
+        '/admin/users',
+        [App\Http\Controllers\AdminController::class, 'users']
+    )->name('admin.users');
+
+    Route::post(
+        '/admin/users',
+        [App\Http\Controllers\AdminController::class, 'storeUser']
+    )->name('admin.users.store');
+
+    Route::delete(
+        '/admin/users/{id}',
+        [App\Http\Controllers\AdminController::class, 'destroyUser']
+    )->name('admin.users.destroy');
+
+    Route::patch('/pimpinan/user/{id}/verifikasi', [AdminController::class, 'verifikasiUser']);
+    Route::patch('/pimpinan/user/{id}/tolak', [AdminController::class, 'tolakUser']);
+});
+
+Route::get('/admin/laporan/pdf', [App\Http\Controllers\AdminController::class, 'cetakPDF'])->name('admin.laporan.pdf');
+
+// --- RUTE MASTER DATA KATEGORI ---
+// --- RUTE MASTER DATA KATEGORI ---
 Route::middleware(['auth', 'admin', 'verified', 'no-cache'])->group(function () {
     Route::get('/admin/kategori', [App\Http\Controllers\AdminController::class, 'kategori'])->name('admin.kategori');
     Route::post('/admin/kategori', [App\Http\Controllers\AdminController::class, 'storeKategori'])->name('admin.kategori.store');
@@ -79,10 +114,10 @@ Route::middleware(['auth', 'admin', 'verified', 'no-cache'])->group(function () 
 
 // --- RUTE KHUSUS TEKNISI ---
 Route::middleware(['auth', 'teknisi', 'verified', 'no-cache'])->group(function () {
-    
+
     // Halaman Dashboard Teknisi
     Route::get('/teknisi/dashboard', [App\Http\Controllers\TeknisiController::class, 'index'])->name('teknisi.dashboard');
-    
+
     // Rute untuk "Ambil Tiket"
     Route::patch('/teknisi/pengaduan/{id}/ambil', [App\Http\Controllers\TeknisiController::class, 'ambilTiket'])->name('teknisi.pengaduan.ambil');
 
@@ -93,13 +128,13 @@ Route::middleware(['auth', 'teknisi', 'verified', 'no-cache'])->group(function (
 // --- RUTE KHUSUS PELANGGAN ---
 Route::get('/pelanggan/dashboard', function () {
     $tiketAktif = Tiket::where('pelanggan_id', Auth::id())
-                       ->whereIn('status', ['menunggu verifikasi', 'diproses'])
-                       ->first();
+        ->whereIn('status', ['menunggu verifikasi', 'diproses'])
+        ->first();
 
     $riwayatTiket = Tiket::where('pelanggan_id', Auth::id())
-                         ->where('status', 'selesai')
-                         ->orderBy('created_at', 'desc')
-                         ->get();
+        ->where('status', 'selesai')
+        ->orderBy('created_at', 'desc')
+        ->get();
 
     return view('pelanggan-dashboard', compact('tiketAktif', 'riwayatTiket'));
 })->middleware(['auth', 'verified', 'no-cache'])->name('pelanggan.dashboard');
@@ -127,7 +162,7 @@ Route::middleware(['auth', 'pimpinan', 'verified', 'no-cache'])->group(function 
 // --- RUTE KHUSUS PIMPINAN ---
 Route::middleware(['auth', 'pimpinan', 'verified', 'no-cache'])->group(function () {
     Route::get('/pimpinan/dashboard', [App\Http\Controllers\SuperAdminController::class, 'index'])->name('pimpinan.dashboard');
-    
+
     // Rute untuk Tambah Pengguna
     Route::get('/pimpinan/pengguna/tambah', [App\Http\Controllers\SuperAdminController::class, 'create'])->name('pimpinan.users.create');
     Route::post('/pimpinan/pengguna', [App\Http\Controllers\SuperAdminController::class, 'store'])->name('pimpinan.users.store');
@@ -141,4 +176,10 @@ Route::middleware(['auth', 'pimpinan', 'verified', 'no-cache'])->group(function 
     // --- RUTE PENGATURAN SISTEM ---
     Route::get('/pimpinan/pengaturan', [App\Http\Controllers\SuperAdminController::class, 'pengaturan'])->name('pimpinan.pengaturan');
     Route::put('/pimpinan/pengaturan', [App\Http\Controllers\SuperAdminController::class, 'updatePengaturan'])->name('pimpinan.pengaturan.update');
+    Route::patch('/pimpinan/users/{id}/approve', [SuperAdminController::class, 'approveTeknisi'])
+        ->name('pimpinan.users.approve');
+    Route::patch('/pimpinan/users/{id}/approve', [SuperAdminController::class, 'approveUser'])
+        ->name('pimpinan.users.approve');
+    Route::get('/pimpinan/validasi-teknisi', [SuperAdminController::class, 'validasiTeknisi'])
+        ->name('pimpinan.validasi.teknisi');
 });

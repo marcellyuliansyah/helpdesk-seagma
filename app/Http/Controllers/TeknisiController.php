@@ -14,14 +14,14 @@ class TeknisiController extends Controller
         $teknisiId = Auth::id();
 
         // 1. Tiket yang SIAP DIAMBIL (Sudah divalidasi admin, belum ada teknisinya)
-        $tiketTersedia = Tiket::with('user')
+        $tiketTersedia = Tiket::with('pelanggan')
             ->where('status', 'diproses')
             ->whereNull('teknisi_id')
             ->orderBy('created_at', 'asc')
             ->get();
 
         // 2. Tiket yang SEDANG DIKERJAKAN oleh teknisi yang sedang login
-        $tiketSaya = Tiket::with('user')
+        $tiketSaya = Tiket::with('pelanggan')
             ->where('teknisi_id', $teknisiId)
             ->where('status', 'diproses')
             ->orderBy('updated_at', 'desc')

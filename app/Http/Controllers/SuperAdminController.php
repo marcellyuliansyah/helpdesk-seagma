@@ -44,6 +44,7 @@ class SuperAdminController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password), // Enkripsi password
             'role' => $request->role,
+            'is_approved' => $request->role === 'teknisi' ? false : true,
         ]);
 
         // Kembali ke dashboard dengan pesan sukses
@@ -55,7 +56,7 @@ class SuperAdminController extends Controller
     {
         // Cari pengguna berdasarkan ID, jika tidak ketemu langsung tampilkan error 404
         $user = User::findOrFail($id);
-        
+
         // Hapus pengguna tersebut
         $user->delete();
 
@@ -78,7 +79,7 @@ class SuperAdminController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             // Validasi email: harus unik KECUALI untuk email user ini sendiri
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $id],
             'role' => ['required', 'string'],
         ]);
 
@@ -107,10 +108,12 @@ class SuperAdminController extends Controller
     {
         // Ambil semua tiket urut dari yang terbaru
         $tikets = Tiket::latest()->get();
-        
+
         // Ambil data teknisi saja untuk pilihan menu dropdown Re-assign
-        $teknisi = User::where('role', 'teknisi')->get();
-        
+        $teknisi = User::where('role', 'teknisi')
+            ->where('is_approved', true)
+            ->get();
+
         // Ambil semua user untuk mencocokkan nama pelanggan dan nama teknisi
         $users = User::all();
 
@@ -176,5 +179,28 @@ class SuperAdminController extends Controller
         $pengaturan->save();
 
         return back()->with('success', 'Pengaturan sistem berhasil diperbarui!');
+    }
+
+    public function approveTeknisi($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->role !== 'teknisi') {
+            return back()->with('error', 'Hanya teknisi yang bisa divalidasi.');
+        }
+
+        $user->is_approved = true;
+        $user->save();
+
+        return back()->with('success', 'Teknisi berhasil divalidasi.');
+    }
+
+    public function validasiTeknisi()
+    {
+        $teknisi = User::where('role', 'teknisi')
+            ->latest()
+            ->get();
+
+        return view('pimpinan-validasi-teknisi', compact('teknisi'));
     }
 }
