@@ -64,7 +64,7 @@
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-500"></div>
                     <div class="px-6 py-5 border-b border-gray-50 flex items-center bg-gray-50/10">
                         <span class="w-2 h-2 rounded-full bg-blue-500 inline-block mr-2 animate-pulse"></span>
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 font-tegas">Tugas Saya Saat Ini</h3>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-black font-tegas">Tugas Saya Saat Ini</h3>
                     </div>
                     
                     <div class="divide-y divide-gray-100">
@@ -74,7 +74,7 @@
                                 
                                 <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
                                     <div>
-                                        <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Pelanggan</span>
+                                        <span class="text-[9px] font-bold text-black uppercase tracking-wider block mb-1">Pelanggan</span>
                                         <h4 class="text-base font-bold text-gray-900 uppercase tracking-wide font-tegas">
                                             {{ $tiket->pelanggan->name ?? 'User Tidak Ditemukan' }}
                                         </h4>
@@ -99,7 +99,7 @@
                                 </div>
 
                                 <div class="lg:col-span-7 flex flex-col">
-                                    <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Peta Navigasi & Rute Jalan Otomatis</span>
+                                    <span class="text-[9px] font-bold text-black uppercase tracking-wider block mb-2">Peta Navigasi & Rute Jalan Otomatis</span>
                                     <div class="relative w-full h-72 lg:h-full min-h-[320px] rounded-2xl overflow-hidden border border-gray-200/80 shadow-inner bg-gray-100">
                                         
                                         <div id="map" class="absolute inset-0 w-full h-full"></div>
@@ -114,20 +114,20 @@
                             </div>
                         </div>
                         @empty
-                        <div class="px-6 py-12 text-center text-xs text-gray-400 font-light">Anda belum mengambil tugas apapun saat ini.</div>
+                        <div class="px-6 py-12 text-center text-xs text-black font-light">Anda belum mengambil tugas apapun saat ini.</div>
                         @endforelse
                     </div>
                 </div>
 
                 <div class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/40 border border-gray-100 overflow-hidden">
                     <div class="px-6 py-5 border-b border-gray-50 bg-gray-50/20">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 font-tegas">Antrean Tiket Tersedia</h3>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-black font-tegas">Antrean Tiket Tersedia</h3>
                     </div>
                     
                     <div class="hidden md:block overflow-x-auto">
                         <table class="w-full text-left">
                             <thead>
-                                <tr class="text-[10px] text-gray-400 uppercase tracking-[0.15em] bg-gray-50/50 border-b border-gray-50">
+                                <tr class="text-[10px] text-black uppercase tracking-[0.15em] bg-gray-50/50 border-b border-gray-50">
                                     <th class="px-6 py-4 font-bold">Pelanggan</th>
                                     <th class="px-6 py-4 font-bold">Detail Keluhan</th>
                                     <th class="px-6 py-4 font-bold">Waktu Masuk</th>
@@ -159,7 +159,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="px-6 py-12 text-center text-xs text-gray-400 font-light">Hebat! Semua tiket gangguan sudah bersih ditangani.</td>
+                                    <td colspan="4" class="px-6 py-12 text-center text-xs text-black font-light">Hebat! Semua tiket gangguan sudah bersih ditangani.</td>
                                 </tr>
                                 @endforelse
                             </tbody>

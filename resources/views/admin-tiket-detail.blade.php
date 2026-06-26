@@ -28,8 +28,7 @@
             <div class="bg-white/60 backdrop-blur-md border-b border-gray-100">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
                     <div>
-                        <span class="text-[10px] font-bold text-gray-400 font-mono tracking-widest block mb-0.5">TIKET
-                            #{{ $tiket->nomor_tiket }}</span>
+
                         <h2 class="text-xl font-bold text-gray-900 font-tegas leading-none">
                             Detail Berkas Pengaduan
                         </h2>
@@ -87,28 +86,28 @@
 
                             <div class="space-y-6">
                                 <div>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
+                                    <p class="text-[10px] font-bold text-black uppercase tracking-widest mb-2">
                                         Deskripsi Kronologi Gangguan</p>
                                     <p
-                                        class="text-gray-600 text-sm leading-relaxed font-light bg-gray-50/50 p-4 rounded-2xl border border-gray-50">
+                                        class="text-black text-sm leading-relaxed font-light bg-gray-50/50 p-4 rounded-2xl border border-gray-50">
                                         {{ $tiket->deskripsi }}</p>
                                 </div>
 
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-5 border-t border-gray-50">
                                     <div>
-                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+                                        <p class="text-[10px] font-bold text-black uppercase tracking-widest mb-1">
                                             Dilaporkan Pada</p>
                                         <p class="text-xs font-semibold text-gray-800">
                                             {{ $tiket->created_at->format('d M Y - H:i') }} WIB</p>
                                     </div>
                                     <div>
-                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">ID
+                                        <p class="text-[10px] font-bold text-black uppercase tracking-widest mb-1">ID
                                             Pengguna</p>
                                         <p class="text-xs font-mono text-gray-800 font-medium">
                                             #{{ $tiket->pelanggan->id ?? '-' }}</p>
                                     </div>
                                     <div>
-                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+                                        <p class="text-[10px] font-bold text-black uppercase tracking-widest mb-1">
                                             Teknisi Lapangan</p>
                                         <p
                                             class="text-xs font-bold {{ $tiket->teknisi_id ? 'text-blue-600' : 'text-red-500' }}">
@@ -130,7 +129,7 @@
 
                                 <!-- Nama -->
                                 <div>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">
+                                    <p class="text-[10px] font-bold text-black uppercase mb-1">
                                         Nama Lengkap
                                     </p>
 
@@ -141,7 +140,7 @@
 
                                 <!-- Email -->
                                 <div>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">
+                                    <p class="text-[10px] font-bold text-black uppercase mb-1">
                                         Email
                                     </p>
 
@@ -152,7 +151,7 @@
 
                                 <!-- No Telepon -->
                                 <div>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">
+                                    <p class="text-[10px] font-bold text-black uppercase mb-1">
                                         No Telepon
                                     </p>
 
@@ -163,7 +162,7 @@
 
                                 <!-- Alamat -->
                                 <div>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">
+                                    <p class="text-[10px] font-bold text-black uppercase mb-1">
                                         Alamat
                                     </p>
 
@@ -180,7 +179,7 @@
 
                         <div
                             class="bg-white p-4 shadow-xl shadow-gray-200/30 border border-gray-100/50 rounded-[2rem] overflow-hidden">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 ml-2">Geolokasi
+                            <p class="text-[10px] font-bold text-black uppercase tracking-widest mb-3 ml-2">Geolokasi
                                 Perangkat WiFi</p>
 
                             <div
@@ -214,7 +213,7 @@
 
                                     <!-- TEKNISI -->
                                     <div>
-                                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-2">
+                                        <label class="block text-[10px] font-bold text-black uppercase mb-2">
                                             Pilih Teknisi
                                         </label>
 
@@ -234,7 +233,7 @@
 
                                     <!-- STATUS -->
                                     <div>
-                                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-2">
+                                        <label class="block text-[10px] font-bold text-black uppercase mb-2">
                                             Status Laporan
                                         </label>
 

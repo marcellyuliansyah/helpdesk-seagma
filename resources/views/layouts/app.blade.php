@@ -1,36 +1,84 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+
+        .bg-grid-pattern {
+            background-image:
+                linear-gradient(to right, #f8f9fa 1px, transparent 1px),
+                linear-gradient(to bottom, #f8f9fa 1px, transparent 1px);
+
+            background-size: 3rem 3rem;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased relative">
+
+    {{-- BACKGROUND --}}
+    <div class="fixed inset-0 z-0 bg-grid-pattern overflow-hidden">
+
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/80 to-white"></div>
+
+        {{-- MERAH --}}
+        <div
+            class="absolute -top-24 right-[-5%]
+            w-[600px] h-[600px]
+            rounded-full
+            bg-gradient-to-bl
+            from-red-300/40
+            to-orange-200/20
+            blur-[90px]">
         </div>
-    </body>
+
+        {{-- ABU --}}
+        <div
+            class="absolute top-[10%] left-[-10%]
+            w-[500px] h-[500px]
+            rounded-full
+            bg-gradient-to-tr
+            from-gray-300/40
+            to-red-100/30
+            blur-[90px]">
+        </div>
+
+    </div>
+
+    <div class="relative z-10 min-h-screen">
+        
+        @include('layouts.navigation')
+
+        <!-- Page Heading -->
+        @if (isset($header))
+            <header class="bg-white shadow">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
+                </div>
+            </header>
+        @endif
+
+        <!-- Page Content -->
+        <main>
+            {{ $slot }}
+        </main>
+    </div>
+</body>
+
 </html>

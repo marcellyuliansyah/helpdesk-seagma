@@ -30,11 +30,11 @@
                     <h2 class="text-2xl font-bold tracking-tight text-gray-950 font-tegas">
                         Buat Pengaduan
                     </h2>
-                    <p class="text-xs text-gray-400 mt-1 font-light tracking-wide">Layanan dukungan teknis infrastruktur
+                    <p class="text-xs text-black mt-1 font-light tracking-wide">Layanan dukungan teknis infrastruktur
                         PT Seagma.</p>
                 </div>
                 <a href="{{ url('/pelanggan/dashboard') }}"
-                    class="text-xs font-semibold tracking-widest text-gray-400 hover:text-gray-900 transition-colors duration-300 flex items-center gap-1">
+                    class="text-xs font-semibold tracking-widest text-black hover:text-gray-900 transition-colors duration-300 flex items-center gap-1">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -71,7 +71,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-gray-100">
 
                         <div>
-                            <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 font-tegas">
+                            <h3 class="text-xs font-bold uppercase tracking-widest text-black font-tegas">
                                 01. Pelapor
                             </h3>
                         </div>
@@ -82,7 +82,7 @@
                                 {{ Auth::user()->name }}
                             </div>
 
-                            <div class="text-xs text-gray-400 font-light mt-0.5">
+                            <div class="text-xs text-black font-light mt-0.5">
                                 {{ Auth::user()->email }}
                             </div>
 
@@ -119,7 +119,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-gray-100">
 
                         <div>
-                            <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 font-tegas">
+                            <h3 class="text-xs font-bold uppercase tracking-widest text-black font-tegas">
                                 02. Lokasi Gangguan
                             </h3>
                         </div>
@@ -136,16 +136,16 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-gray-100">
                         <div>
-                            <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 font-tegas">03. Detail
+                            <h3 class="text-xs font-bold uppercase tracking-widest text-black font-tegas">03. Detail
                                 Masalah</h3>
-                            <p class="text-[11px] text-gray-400 font-light mt-2 pr-4 leading-relaxed">Berikan informasi
+                            <p class="text-[11px] text-black font-light mt-2 pr-4 leading-relaxed">Berikan informasi
                                 singkat dan deskripsi mendalam mengenai kendala jaringan yang terjadi.</p>
                         </div>
 
                         <div class="sm:col-span-2 space-y-6">
                             <div>
                                 <label for="judul"
-                                    class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Judul
+                                    class="block text-[10px] font-bold text-black uppercase tracking-widest mb-2">Judul
                                     Keluhan Singkat</label>
                                 <input type="text" id="judul" name="judul" required
                                     placeholder="Misal: Koneksi Lambat / Lampu Indikator Merah"
@@ -154,7 +154,7 @@
 
                             <div>
                                 <label
-                                    class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Kategori
+                                    class="block text-[10px] font-bold text-black uppercase tracking-widest mb-2">Kategori
                                     Gangguan</label>
                                 <select name="kategori_id" required
                                     class="block w-full rounded-xl border-0 py-3.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-100 focus:ring-1 focus:ring-inset focus:ring-gray-900 bg-gray-50/30 sm:text-sm transition-all duration-300 outline-none appearance-none">
@@ -171,7 +171,7 @@
 
                             <div>
                                 <label for="deskripsi"
-                                    class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Deskripsi
+                                    class="block text-[10px] font-bold text-black uppercase tracking-widest mb-2">Deskripsi
                                     Lengkap Kronologi</label>
                                 <textarea id="deskripsi" name="deskripsi" rows="4" required
                                     placeholder="Tuliskan detail kendala secara kronologis di sini..."

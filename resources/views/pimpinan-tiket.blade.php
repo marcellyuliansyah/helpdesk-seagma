@@ -31,7 +31,7 @@
                         <h2 class="text-2xl font-bold text-gray-950 font-tegas leading-none">
                             Manajemen Pengaduan Global
                         </h2>
-                        <p class="text-xs text-gray-400 mt-1.5 font-light">Pantau status, lakukan delegasi ulang regu
+                        <p class="text-xs text-black mt-1.5 font-light">Pantau status, lakukan delegasi ulang regu
                             teknisi, dan kendalikan seluruh berkas laporan sistem.</p>
                     </div>
 
@@ -72,7 +72,7 @@
                         <table class="w-full text-left">
                             <thead>
                                 <tr
-                                    class="text-[10px] text-gray-400 uppercase tracking-[0.15em] bg-gray-50/30 border-b border-gray-50">
+                                    class="text-[10px] text-black uppercase tracking-[0.15em] bg-gray-50/30 border-b border-gray-50">
                                     <th class="px-8 py-4 font-bold">Rincian Keluhan &amp; Waktu</th>
                                     <th class="px-8 py-4 font-bold">Pelanggan</th>
                                     <th class="px-8 py-4 font-bold">Status Berkas</th>
@@ -90,7 +90,7 @@
                                     @endphp
                                     <tr class="group hover:bg-gray-50/40 transition-all duration-200">
                                         <td class="px-8 py-5">
-                                            <div class="text-[10px] font-mono font-medium text-gray-400 mb-1">
+                                            <div class="text-[10px] font-mono font-medium text-black mb-1">
                                                 {{ \Carbon\Carbon::parse($tiket->created_at)->format('d F Y, H:i') }}
                                                 WIB
                                             </div>
@@ -98,7 +98,7 @@
                                                 class="font-bold text-gray-900 uppercase tracking-wide text-xs font-tegas">
                                                 {{ $tiket->judul }}
                                             </div>
-                                            <div class="text-xs text-gray-400 font-light mt-1 max-w-md line-clamp-2">
+                                            <div class="text-xs text-black font-light mt-1 max-w-md line-clamp-2">
                                                 {{ $tiket->deskripsi }}
                                             </div>
                                         </td>

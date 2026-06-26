@@ -35,7 +35,7 @@
                         <h2 class="text-2xl font-bold text-gray-950 font-tegas leading-none">
                             Dashboard Pimpinan
                         </h2>
-                        <p class="text-xs text-gray-400 mt-1.5 font-light">Selamat datang kembali, Bapak/Ibu Pimpinan.
+                        <p class="text-xs text-black mt-1.5 font-light">Selamat datang kembali, Bapak/Ibu Pimpinan.
                             Manajemen otentikasi ekosistem PT Seagma.</p>
                     </div>
 
@@ -83,53 +83,96 @@
                 @endif
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10 relative z-20">
-                    <div
-                        class="bg-white rounded-[2rem] p-6 shadow-xl shadow-gray-200/20 border border-gray-100/50 flex items-center justify-between transition-transform hover:-translate-y-1 duration-300">
+
+                    {{-- TOTAL PELANGGAN --}}
+                    <a href="{{ route('pimpinan.users.list', 'pelanggan') }}"
+                        class="bg-white rounded-[2rem] p-6 shadow-xl shadow-gray-200/20 border border-gray-100/50 flex items-center justify-between hover:-translate-y-1 duration-300 transition block">
+
                         <div>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Akun
-                                Pelanggan</p>
-                            <p class="text-4xl font-extrabold text-gray-900 font-tegas mt-1">{{ $totalPelanggan }}</p>
+                            <p class="text-[10px] font-bold text-black uppercase tracking-widest">
+                                Total Akun Pelanggan
+                            </p>
+
+                            <p class="text-4xl font-extrabold text-gray-900 font-tegas mt-1">
+                                {{ $totalPelanggan }}
+                            </p>
+
+                            <p class="text-[10px] text-red-500 mt-2 font-semibold">
+                                Klik untuk melihat data
+                            </p>
                         </div>
+
                         <div
                             class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-100 shadow-inner">
+
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
-                        </div>
-                    </div>
 
-                    <div
-                        class="bg-white rounded-[2rem] p-6 shadow-xl shadow-gray-200/20 border border-gray-100/50 flex items-center justify-between transition-transform hover:-translate-y-1 duration-300">
-                        <div>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Data Teknisi
-                            </p>
-                            <p class="text-4xl font-extrabold text-gray-900 font-tegas mt-1">{{ $totalTeknisi }}</p>
                         </div>
+                    </a>
+
+
+                    {{-- DATA TEKNISI --}}
+                    <a href="{{ route('pimpinan.users.list', 'teknisi') }}"
+                        class="bg-white rounded-[2rem] p-6 shadow-xl shadow-gray-200/20 border border-gray-100/50 flex items-center justify-between hover:-translate-y-1 duration-300 transition block">
+
+                        <div>
+                            <p class="text-[10px] font-bold text-black uppercase tracking-widest">
+                                Data Teknisi
+                            </p>
+
+                            <p class="text-4xl font-extrabold text-gray-900 font-tegas mt-1">
+                                {{ $totalTeknisi }}
+                            </p>
+
+                            <p class="text-[10px] text-red-500 mt-2 font-semibold">
+                                Klik untuk melihat data
+                            </p>
+                        </div>
+
                         <div
                             class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-100 shadow-inner">
+
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
-                        </div>
-                    </div>
 
-                    <div
-                        class="bg-white rounded-[2rem] p-6 shadow-xl shadow-gray-200/20 border border-gray-100/50 flex items-center justify-between transition-transform hover:-translate-y-1 duration-300">
-                        <div>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Staf Operator Admin
-                            </p>
-                            <p class="text-4xl font-extrabold text-gray-900 font-tegas mt-1">{{ $totalAdmin }}</p>
                         </div>
+                    </a>
+
+
+                    {{-- DATA ADMIN --}}
+                    <a href="{{ route('pimpinan.users.list', 'admin') }}"
+                        class="bg-white rounded-[2rem] p-6 shadow-xl shadow-gray-200/20 border border-gray-100/50 flex items-center justify-between hover:-translate-y-1 duration-300 transition block">
+
+                        <div>
+                            <p class="text-[10px] font-bold text-black uppercase tracking-widest">
+                                Staf Operator Admin
+                            </p>
+
+                            <p class="text-4xl font-extrabold text-gray-900 font-tegas mt-1">
+                                {{ $totalAdmin }}
+                            </p>
+
+                            <p class="text-[10px] text-red-500 mt-2 font-semibold">
+                                Klik untuk melihat data
+                            </p>
+                        </div>
+
                         <div
                             class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-100 shadow-inner">
+
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
+
                         </div>
-                    </div>
+                    </a>
+
                 </div>
 
                 {{-- <div

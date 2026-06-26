@@ -36,7 +36,8 @@ class SuperAdminController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            'role' => ['required', 'string'],
+            'ro
+            le' => ['required', 'string'],
         ]);
 
         User::create([
@@ -202,5 +203,37 @@ class SuperAdminController extends Controller
             ->get();
 
         return view('pimpinan-validasi-teknisi', compact('teknisi'));
+    }
+
+    public function daftarUser($role)
+    {
+        $roleValid = [
+            'pelanggan',
+            'teknisi',
+            'admin'
+        ];
+
+        if (!in_array($role, $roleValid)) {
+            abort(404);
+        }
+
+        $users = User::where('role', $role)
+            ->latest()
+            ->get();
+
+        $judul = match ($role) {
+            'pelanggan' => 'Data Pelanggan',
+            'teknisi' => 'Data Teknisi',
+            'admin' => 'Staf Operator Admin',
+        };
+
+        return view(
+            'pimpinan-daftar-user',
+            compact(
+                'users',
+                'judul',
+                'role'
+            )
+        );
     }
 }

@@ -157,6 +157,10 @@ Route::delete('/pelanggan/pengaduan/{id}', [TiketController::class, 'destroy'])
 // --- RUTE KHUSUS PIMPINAN ---
 Route::middleware(['auth', 'pimpinan', 'verified', 'no-cache'])->group(function () {
     Route::get('/pimpinan/dashboard', [App\Http\Controllers\SuperAdminController::class, 'index'])->name('pimpinan.dashboard');
+    Route::get(
+        '/pimpinan/users/{role}',
+        [SuperAdminController::class, 'daftarUser']
+    )->name('pimpinan.users.list');
 });
 
 // --- RUTE KHUSUS PIMPINAN ---

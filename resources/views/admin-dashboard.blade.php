@@ -30,7 +30,7 @@
                         <h2 class="text-2xl font-bold text-gray-900 font-tegas">
                             Panel Kendali Admin
                         </h2>
-                        <p class="text-sm text-gray-400 mt-1 font-light">Pusat kendali pemantauan infrastruktur dan tiket
+                        <p class="text-sm text-black mt-1 font-light">Pusat kendali pemantauan infrastruktur dan tiket
                             gangguan masuk.</p>
                     </div>
 
@@ -58,7 +58,7 @@
                     <div
                         class="bg-white rounded-[2rem] p-6 shadow-xl shadow-gray-200/30 border border-gray-100/50 flex items-center justify-between group">
                         <div>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Tiket</p>
+                            <p class="text-[10px] font-bold text-black uppercase tracking-widest">Total Tiket</p>
                             <p class="text-3xl font-extrabold text-gray-900 font-tegas mt-1">{{ $stats['total'] }}</p>
                         </div>
                         <div
@@ -172,7 +172,7 @@
                         <table class="w-full text-left">
                             <thead>
                                 <tr
-                                    class="text-[10px] text-gray-400 uppercase tracking-[0.15em] bg-gray-50/50 border-b border-gray-50">
+                                    class="text-[10px] text-black uppercase tracking-[0.15em] bg-gray-50/50 border-b border-gray-50">
                                     <th class="px-8 py-4 font-bold">Pelanggan</th>
                                     <th class="px-8 py-4 font-bold">Detail Gangguan</th>
                                     <th class="px-8 py-4 font-bold">Status</th>
@@ -187,14 +187,14 @@
                                         <td class="px-8 py-4">
                                             <p class="text-xs font-bold text-gray-900 uppercase tracking-wide">
                                                 {{ $tiket->pelanggan->name ?? 'User Hilang' }}</p>
-                                            <p class="text-[10px] text-gray-400 font-mono mt-0.5">
+                                            <p class="text-[10px] text-black font-mono mt-0.5">
                                                 #{{ $tiket->nomor_tiket ?? $tiket->id }}</p>
                                         </td>
 
                                         <td class="px-8 py-4">
                                             <p class="text-xs font-semibold text-gray-800">
                                                 {{ Str::limit($tiket->judul, 35) }}</p>
-                                            <p class="text-[11px] text-gray-400 font-light mt-0.5 max-w-xs truncate">
+                                            <p class="text-[11px] text-black font-light mt-0.5 max-w-xs truncate">
                                                 {{ $tiket->deskripsi }}</p>
 
                                             @if ($tiket->kategori)
@@ -204,7 +204,7 @@
                                                 </span>
                                             @else
                                                 <span
-                                                    class="inline-flex mt-1.5 text-[8px] bg-gray-50 text-gray-400 px-2 py-0.5 rounded-full font-medium uppercase tracking-wider italic ring-1 ring-gray-100">
+                                                    class="inline-flex mt-1.5 text-[8px] bg-gray-50 text-black px-2 py-0.5 rounded-full font-medium uppercase tracking-wider italic ring-1 ring-gray-100">
                                                     Kosong
                                                 </span>
                                             @endif
@@ -223,7 +223,7 @@
                                             @endif
                                         </td>
 
-                                        <td class="px-8 py-4 text-xs text-gray-500 font-light">
+                                        <td class="px-8 py-4 text-xs text-black font-light">
                                             {{ $tiket->created_at->format('d M Y H:i') }}
                                         </td>
 
@@ -235,7 +235,7 @@
                                                 </span>
                                             @else
                                                 <span
-                                                    class="text-[9px] bg-gray-50 text-gray-400 px-2.5 py-1 rounded-xl font-medium uppercase tracking-wider italic border border-dashed border-gray-200">
+                                                    class="text-[9px] bg-gray-50 text-black px-2.5 py-1 rounded-xl font-medium uppercase tracking-wider italic border border-dashed border-gray-200">
                                                     Belum Ditunjuk
                                                 </span>
                                             @endif

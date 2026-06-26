@@ -22,7 +22,7 @@
                     <h2 class="text-2xl font-bold text-gray-950 font-tegas leading-none">
                         Pengaturan Sistem
                     </h2>
-                    <p class="text-xs text-gray-400 mt-1.5 font-light">Kelola penamaan global, atribusi instansi, dan penjenamaan visual ekosistem.</p>
+                    <p class="text-xs text-black mt-1.5 font-light">Kelola penamaan global, atribusi instansi, dan penjenamaan visual ekosistem.</p>
                 </div>
             </div>
 
@@ -43,17 +43,17 @@
                         @method('PUT')
                         
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2.5 ml-0.5">Nama Sistem Aplikasi</label>
+                            <label class="block text-[10px] font-bold text-black uppercase tracking-widest mb-2.5 ml-0.5">Nama Sistem Aplikasi</label>
                             <input type="text" name="nama_aplikasi" value="{{ $pengaturan->nama_aplikasi }}" class="block w-full rounded-xl border-0 py-3.5 px-4 text-gray-950 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-1 focus:ring-inset focus:ring-gray-950 bg-gray-50/40 text-sm font-medium outline-none transition-all duration-300" required>
                         </div>
 
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2.5 ml-0.5">Nama Perusahaan / Instansi</label>
+                            <label class="block text-[10px] font-bold text-black uppercase tracking-widest mb-2.5 ml-0.5">Nama Perusahaan / Instansi</label>
                             <input type="text" name="nama_perusahaan" value="{{ $pengaturan->nama_perusahaan }}" class="block w-full rounded-xl border-0 py-3.5 px-4 text-gray-950 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-1 focus:ring-inset focus:ring-gray-950 bg-gray-50/40 text-sm font-medium outline-none transition-all duration-300" required>
                         </div>
 
                         <div class="rounded-2xl border border-gray-100 bg-gray-50/40 p-6 space-y-4">
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Visualisasi Logo Aplikasi (Opsional)</label>
+                            <label class="block text-[10px] font-bold text-black uppercase tracking-widest">Visualisasi Logo Aplikasi (Opsional)</label>
                             
                             @if($pengaturan->logo)
                             <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-gray-50 shadow-sm w-fit">
@@ -61,7 +61,7 @@
                                     <img src="{{ asset('storage/' . $pengaturan->logo) }}" alt="Logo" class="h-12 w-12 object-contain">
                                 </div>
                                 <div>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Identitas Aktif</p>
+                                    <p class="text-[10px] font-bold text-black uppercase tracking-wider">Identitas Aktif</p>
                                     <p class="text-xs text-gray-600 font-light mt-0.5">Berkas lambang logo sistem tersimpan saat ini.</p>
                                 </div>
                             </div>
@@ -70,7 +70,7 @@
                             <div class="relative group">
                                 <input type="file" name="logo" accept="image/png, image/jpeg, image/jpg" class="block w-full text-xs text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-wider file:bg-gray-950 file:text-white hover:file:bg-red-600 file:transition-colors file:duration-300 cursor-pointer">
                             </div>
-                            <p class="text-[10px] text-gray-400 font-light font-mono leading-none">* Ekstensi formal: JPG / PNG. Alokasi kapasitas maksimal berkas: 2 Megabytes.</p>
+                            <p class="text-[10px] text-gray-600 font-light font-mono leading-none">* Ekstensi formal: JPG / PNG. Alokasi kapasitas maksimal berkas: 2 Megabytes.</p>
                         </div>
 
                         <div class="pt-4 border-t border-gray-50 flex flex-col sm:flex-row items-center justify-between gap-4">

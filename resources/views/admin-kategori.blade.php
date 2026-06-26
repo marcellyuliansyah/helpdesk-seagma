@@ -22,7 +22,7 @@
                         <h2 class="text-2xl font-bold text-gray-900 font-tegas">
                             Manajemen Data Kategori
                         </h2>
-                        <p class="text-sm text-gray-400 mt-1 font-light">Kelola master rumpun masalah gangguan untuk klasifikasi tiket pengaduan.</p>
+                        <p class="text-sm text-black mt-1 font-light">Kelola master rumpun masalah gangguan untuk klasifikasi tiket pengaduan.</p>
                     </div>
                     
                     <div class="shrink-0">
@@ -53,13 +53,13 @@
                     <div class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xl shadow-gray-200/30 border border-gray-100/50 h-fit">
                         <div class="mb-6">
                             <h3 class="text-sm font-bold uppercase tracking-wider text-gray-800 font-tegas">Tambah Kategori</h3>
-                            <p class="text-xs text-gray-400 mt-1 font-light">Buat sub-klasifikasi keluhan gangguan baru.</p>
+                            <p class="text-xs text-black mt-1 font-light">Buat sub-klasifikasi keluhan gangguan baru.</p>
                         </div>
                         
                         <form action="{{ route('admin.kategori.store') }}" method="POST" class="space-y-5">
                             @csrf
                             <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Nama Kategori Baru</label>
+                                <label class="block text-[10px] font-bold text-black uppercase tracking-widest mb-2">Nama Kategori Baru</label>
                                 <input type="text" name="nama_kategori" required placeholder="Contoh: Lampu LOS Merah" 
                                     class="block w-full rounded-xl border-0 py-3.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-100 placeholder:text-gray-300 focus:ring-1 focus:ring-inset focus:ring-gray-900 bg-gray-50/30 sm:text-sm transition-all duration-300 outline-none">
                             </div>
@@ -78,7 +78,7 @@
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
                                 <thead>
-                                    <tr class="text-[10px] text-gray-400 uppercase tracking-[0.15em] bg-gray-50/30 border-b border-gray-50">
+                                    <tr class="text-[10px] text-black uppercase tracking-[0.15em] bg-gray-50/30 border-b border-gray-50">
                                         <th class="px-8 py-4 font-bold text-center w-16">No</th>
                                         <th class="px-8 py-4 font-bold">Deskripsi Kategori Masalah</th>
                                         <th class="px-8 py-4 font-bold text-center w-32">Tindakan</th>

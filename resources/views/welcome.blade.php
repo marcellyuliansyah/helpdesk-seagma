@@ -108,11 +108,11 @@
                         Log in
                     </a>
 
-                    @if (Route::has('register'))
+                    {{-- @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="w-full text-center px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-white bg-gray-950 hover:bg-red-600 transition-all">
                             Register Baru
                         </a>
-                    @endif
+                    @endif --}}
                 @endauth
             </div>
         @endif
