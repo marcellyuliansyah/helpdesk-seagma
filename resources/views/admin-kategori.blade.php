@@ -1,125 +1,123 @@
 <x-app-layout>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap');
-        
-        .font-tegas { font-family: 'Poppins', sans-serif; }
-        body { font-family: 'Inter', sans-serif; }
+    <div class="min-h-screen bg-slate-50 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pb-12">
+        <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 pt-8">
 
-        .bg-grid-pattern {
-            background-image: linear-gradient(to right, #f1f5f9 1px, transparent 1px), linear-gradient(to bottom, #f1f5f9 1px, transparent 1px);
-            background-size: 3rem 3rem;
-        }
-    </style>
+            @if(session('success'))
+                <div class="rounded-[1.25rem] bg-[#10b981]/10 p-4 mb-6 border border-[#10b981]/20 shadow-sm">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-[#10b981]" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-semibold text-emerald-800">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
-    <div class="relative min-h-screen bg-gray-50/50 pb-16">
-        <div class="fixed inset-0 z-0 bg-grid-pattern opacity-60"></div>
-        <div class="fixed top-0 right-0 w-[600px] h-[600px] bg-red-50/30 rounded-full blur-[130px] z-0 pointer-events-none"></div>
-
-        <div class="relative z-10">
-            <div class="bg-white/60 backdrop-blur-md border-b border-gray-100">
-                <div class="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10 gap-4">
+                <div class="flex items-center gap-5">
+                    <div class="flex h-14 w-14 items-center justify-center rounded-[1rem] bg-[#ef4444] text-white shadow-lg shadow-red-200/50">
+                        <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                        </svg>
+                    </div>
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900 font-tegas">
+                        <h2 class="text-[1.6rem] font-bold text-gray-800 tracking-tight">
                             Manajemen Data Kategori
                         </h2>
-                        <p class="text-sm text-black mt-1 font-light">Kelola master rumpun masalah gangguan untuk klasifikasi tiket pengaduan.</p>
+                        <p class="text-[0.95rem] font-medium text-gray-500 mt-1">Kelola master rumpun masalah gangguan untuk klasifikasi tiket pengaduan.</p>
                     </div>
-                    
-                    <div class="shrink-0">
-                        <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-wide text-gray-500 hover:text-gray-900 transition-colors duration-200 bg-white px-4 py-2 rounded-xl border border-gray-100 shadow-sm">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                            DASHBOARD
-                        </a>
-                    </div>
+                </div>
+                
+                <div class="flex-none">
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 rounded-full bg-[#1e293b] px-7 py-3 text-sm font-bold text-white shadow-md hover:bg-[#0f172a] hover:-translate-y-0.5 transition-all duration-200 uppercase tracking-wider">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        Kembali
+                    </a>
                 </div>
             </div>
 
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 
-                @if(session('success'))
-                <div class="mb-8 bg-green-50 border border-green-100 rounded-2xl p-4 flex items-center gap-4 animate-fade-in-down">
-                    <div class="bg-green-500 p-2 rounded-xl text-white">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-bold text-green-900">Aksi Berhasil</h4>
-                        <p class="text-xs text-green-700 font-light">{{ session('success') }}</p>
-                    </div>
-                </div>
-                @endif
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    
-                    <div class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xl shadow-gray-200/30 border border-gray-100/50 h-fit">
-                        <div class="mb-6">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-gray-800 font-tegas">Tambah Kategori</h3>
-                            <p class="text-xs text-black mt-1 font-light">Buat sub-klasifikasi keluhan gangguan baru.</p>
-                        </div>
-                        
-                        <form action="{{ route('admin.kategori.store') }}" method="POST" class="space-y-5">
-                            @csrf
-                            <div>
-                                <label class="block text-[10px] font-bold text-black uppercase tracking-widest mb-2">Nama Kategori Baru</label>
-                                <input type="text" name="nama_kategori" required placeholder="Contoh: Lampu LOS Merah" 
-                                    class="block w-full rounded-xl border-0 py-3.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-100 placeholder:text-gray-300 focus:ring-1 focus:ring-inset focus:ring-gray-900 bg-gray-50/30 sm:text-sm transition-all duration-300 outline-none">
+                <div class="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 p-6 sm:p-8 h-fit relative overflow-hidden">
+                    <div class="mb-6 border-b border-gray-100 pb-5">
+                        <div class="flex items-center gap-3 mb-1">
+                            <div class="p-2 bg-gray-50 rounded-lg">
+                                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             </div>
-                            
-                            <button type="submit" class="w-full flex justify-center rounded-xl bg-gray-900 px-4 py-3.5 text-xs font-bold tracking-widest text-white shadow-md hover:bg-red-600 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
-                                SIMPAN DATA
-                            </button>
-                        </form>
+                            <h3 class="text-lg font-bold text-gray-800">Tambah Kategori</h3>
+                        </div>
+                        <p class="text-sm text-gray-500 font-medium ml-11">Buat sub-klasifikasi keluhan baru.</p>
                     </div>
-
-                    <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-xl shadow-gray-200/30 border border-gray-100 overflow-hidden">
-                        <div class="px-8 py-5 border-b border-gray-50 bg-gray-50/20">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-gray-800 font-tegas">Kategori Terdaftar</h3>
+                    
+                    <form action="{{ route('admin.kategori.store') }}" method="POST" class="space-y-6">
+                        @csrf
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Nama Kategori Baru</label>
+                            <input type="text" name="nama_kategori" required placeholder="Contoh: Lampu LOS Merah" 
+                                class="block w-full rounded-2xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#1e293b] sm:text-sm font-medium transition-all bg-gray-50 focus:bg-white">
                         </div>
                         
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead>
-                                    <tr class="text-[10px] text-black uppercase tracking-[0.15em] bg-gray-50/30 border-b border-gray-50">
-                                        <th class="px-8 py-4 font-bold text-center w-16">No</th>
-                                        <th class="px-8 py-4 font-bold">Deskripsi Kategori Masalah</th>
-                                        <th class="px-8 py-4 font-bold text-center w-32">Tindakan</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-50">
-                                    @forelse($semuaKategori as $index => $kat)
-                                    <tr class="group hover:bg-gray-50/40 transition-all duration-200">
-                                        <td class="px-8 py-4 text-center">
-                                            <span class="text-xs font-mono text-gray-400 font-medium">{{ $index + 1 }}</span>
+                        <button type="submit" class="w-full flex justify-center items-center gap-2 rounded-full bg-[#10b981] px-4 py-3.5 text-sm font-bold tracking-wider text-white shadow-md hover:bg-emerald-600 transition-all duration-200 uppercase">
+                            Simpan Data
+                        </button>
+                    </form>
+                </div>
+
+                <div class="lg:col-span-2 bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden p-6 sm:p-8">
+                    <div class="mb-6 flex items-center gap-3 border-b border-gray-100 pb-5">
+                        <div class="p-2 bg-gray-50 rounded-lg">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800">Daftar Kategori Tersedia</h3>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-max">
+                            <thead>
+                                <tr class="border-b-2 border-gray-100">
+                                    <th class="py-4 px-4 font-bold text-gray-400 text-[11px] uppercase tracking-wider w-16 text-center">No</th>
+                                    <th class="py-4 px-4 font-bold text-gray-400 text-[11px] uppercase tracking-wider">Nama Kategori Masalah</th>
+                                    <th class="py-4 px-4 font-bold text-gray-400 text-[11px] uppercase tracking-wider text-right w-32">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($semuaKategori as $index => $kat)
+                                    <tr class="border-b border-gray-50 hover:bg-slate-50/50 transition-colors duration-200">
+                                        <td class="py-5 px-4 align-middle text-center">
+                                            <span class="text-sm font-bold text-gray-400">{{ $index + 1 }}</span>
                                         </td>
-                                        <td class="px-8 py-4">
-                                            <p class="text-xs font-bold text-gray-900 tracking-wide bg-purple-50/60 text-purple-700 px-3 py-1.5 rounded-full inline-block ring-1 ring-purple-100">
-                                                📁 {{ $kat->nama_kategori }}
-                                            </p>
+                                        <td class="py-5 px-4 align-middle">
+                                            <span class="text-[14px] font-bold text-gray-700">{{ $kat->nama_kategori }}</span>
                                         </td>
-                                        <td class="px-8 py-4 text-center">
-                                            <form action="{{ route('admin.kategori.destroy', $kat->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori masalah ini?')">
+                                        <td class="py-5 px-4 align-middle text-right">
+                                            <form action="{{ route('admin.kategori.destroy', $kat->id) }}" method="POST" class="inline-block m-0" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori masalah ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="inline-flex items-center px-4 py-1.5 bg-red-50 hover:bg-red-600 border border-red-100 text-red-600 hover:text-white text-[10px] font-bold uppercase tracking-wider rounded-xl transition-all duration-300">
+                                                <button type="submit" class="inline-flex items-center justify-center rounded-full bg-[#ef4444]/10 text-[#ef4444] hover:bg-[#ef4444] hover:text-white px-5 py-2 text-[11px] font-extrabold tracking-wider transition-all duration-200 uppercase">
                                                     Hapus
                                                 </button>
                                             </form>
                                         </td>
                                     </tr>
-                                    @empty
+                                @empty
                                     <tr>
-                                        <td colspan="3" class="px-8 py-16 text-center">
-                                            <div class="flex flex-col items-center opacity-30">
-                                                <svg class="w-12 h-12 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
-                                                <p class="text-xs font-semibold tracking-wide text-gray-500 uppercase">Belum ada rumpun kategori data.</p>
+                                        <td colspan="3" class="py-16 px-6 text-center">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <div class="p-4 rounded-full bg-gray-50 mb-4 border border-gray-100">
+                                                    <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                                                </div>
+                                                <p class="text-sm font-bold text-gray-400">Belum ada kategori masalah.</p>
                                             </div>
                                         </td>
                                     </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-
                 </div>
 
             </div>

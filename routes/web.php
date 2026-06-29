@@ -60,6 +60,8 @@ Route::get('/admin/dashboard', [App\Http\Controllers\AdminController::class, 'in
     ->middleware(['auth', 'admin', 'verified', 'no-cache'])
     ->name('admin.dashboard');
 
+Route::get('/admin/users/{id}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+
 // Tambahkan 2 rute ini:
 Route::get('/admin/pengaduan/{id}', [App\Http\Controllers\AdminController::class, 'show'])
     ->middleware(['auth', 'admin', 'verified', 'no-cache'])
@@ -104,7 +106,6 @@ Route::middleware([
 
 Route::get('/admin/laporan/pdf', [App\Http\Controllers\AdminController::class, 'cetakPDF'])->name('admin.laporan.pdf');
 
-// --- RUTE MASTER DATA KATEGORI ---
 // --- RUTE MASTER DATA KATEGORI ---
 Route::middleware(['auth', 'admin', 'verified', 'no-cache'])->group(function () {
     Route::get('/admin/kategori', [App\Http\Controllers\AdminController::class, 'kategori'])->name('admin.kategori');
@@ -155,35 +156,36 @@ Route::delete('/pelanggan/pengaduan/{id}', [TiketController::class, 'destroy'])
     ->name('pengaduan.destroy');
 
 // --- RUTE KHUSUS PIMPINAN ---
-Route::middleware(['auth', 'pimpinan', 'verified', 'no-cache'])->group(function () {
-    Route::get('/pimpinan/dashboard', [App\Http\Controllers\SuperAdminController::class, 'index'])->name('pimpinan.dashboard');
-    Route::get(
-        '/pimpinan/users/{role}',
-        [SuperAdminController::class, 'daftarUser']
-    )->name('pimpinan.users.list');
-});
-
 // --- RUTE KHUSUS PIMPINAN ---
 Route::middleware(['auth', 'pimpinan', 'verified', 'no-cache'])->group(function () {
+    
+    // 1. Dashboard & Data Users
     Route::get('/pimpinan/dashboard', [App\Http\Controllers\SuperAdminController::class, 'index'])->name('pimpinan.dashboard');
+    Route::get('/pimpinan/users/{role}', [App\Http\Controllers\SuperAdminController::class, 'daftarUser'])->name('pimpinan.users.list');
 
-    // Rute untuk Tambah Pengguna
+    // 2. Rute Manajemen Pengguna (CRUD)
     Route::get('/pimpinan/pengguna/tambah', [App\Http\Controllers\SuperAdminController::class, 'create'])->name('pimpinan.users.create');
     Route::post('/pimpinan/pengguna', [App\Http\Controllers\SuperAdminController::class, 'store'])->name('pimpinan.users.store');
-    Route::delete('/pimpinan/pengguna/{id}', [App\Http\Controllers\SuperAdminController::class, 'destroy'])->name('pimpinan.users.destroy');
     Route::get('/pimpinan/pengguna/{id}/edit', [App\Http\Controllers\SuperAdminController::class, 'edit'])->name('pimpinan.users.edit');
     Route::put('/pimpinan/pengguna/{id}', [App\Http\Controllers\SuperAdminController::class, 'update'])->name('pimpinan.users.update');
-    // --- RUTE MANAJEMEN TIKET (GOD MODE) ---
+    Route::delete('/pimpinan/pengguna/{id}', [App\Http\Controllers\SuperAdminController::class, 'destroy'])->name('pimpinan.users.destroy');
+    
+    // 3. Rute Validasi Akun
+    Route::get('/pimpinan/validasi-teknisi', [App\Http\Controllers\SuperAdminController::class, 'validasiTeknisi'])->name('pimpinan.validasi.teknisi');
+    // CATATAN: Sebelumnya ada 2 rute 'approve' yang sama persis. Saya jadikan satu ke method approveUser. 
+    // Pastikan bagian ini memanggil 'approveTeknisi', BUKAN 'approveUser'
+Route::patch('/pimpinan/users/{id}/approve', [App\Http\Controllers\SuperAdminController::class, 'approveTeknisi'])->name('pimpinan.users.approve');
+
+    // 4. Rute Manajemen Tiket (GOD MODE)
     Route::get('/pimpinan/tiket', [App\Http\Controllers\SuperAdminController::class, 'allTiket'])->name('pimpinan.tiket.index');
+    
+    // 🔽 INI ADALAH RUTE YANG BARU DITAMBAHKAN UNTUK MENGATASI ERROR:
+    Route::get('/pimpinan/tiket/{id}/detail', [App\Http\Controllers\SuperAdminController::class, 'showTiket'])->name('pimpinan.tiket.show');
+    
     Route::put('/pimpinan/tiket/{id}/reassign', [App\Http\Controllers\SuperAdminController::class, 'reassignTiket'])->name('pimpinan.tiket.reassign');
     Route::delete('/pimpinan/tiket/{id}/hapus', [App\Http\Controllers\SuperAdminController::class, 'destroyTiket'])->name('pimpinan.tiket.destroy');
-    // --- RUTE PENGATURAN SISTEM ---
+    
+    // 5. Rute Pengaturan Sistem
     Route::get('/pimpinan/pengaturan', [App\Http\Controllers\SuperAdminController::class, 'pengaturan'])->name('pimpinan.pengaturan');
     Route::put('/pimpinan/pengaturan', [App\Http\Controllers\SuperAdminController::class, 'updatePengaturan'])->name('pimpinan.pengaturan.update');
-    Route::patch('/pimpinan/users/{id}/approve', [SuperAdminController::class, 'approveTeknisi'])
-        ->name('pimpinan.users.approve');
-    Route::patch('/pimpinan/users/{id}/approve', [SuperAdminController::class, 'approveUser'])
-        ->name('pimpinan.users.approve');
-    Route::get('/pimpinan/validasi-teknisi', [SuperAdminController::class, 'validasiTeknisi'])
-        ->name('pimpinan.validasi.teknisi');
 });

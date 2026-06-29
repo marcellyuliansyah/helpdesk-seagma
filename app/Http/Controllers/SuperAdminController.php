@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Kategori;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,14 +14,38 @@ use Illuminate\Support\Facades\Storage;
 
 class SuperAdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $totalAdmin = User::where('role', 'admin')->count();
         $totalTeknisi = User::where('role', 'teknisi')->count();
         $totalPelanggan = User::where('role', 'pelanggan')->count();
+        
         $users = User::where('id', '!=', Auth::id())->latest()->get();
+        
+        // Ambil semua data kategori untuk dropdown filter
+        $kategoris = Kategori::all();
 
-        return view('pimpinan-dashboard', compact('totalAdmin', 'totalTeknisi', 'totalPelanggan', 'users'));
+        // Buat query dasar untuk tiket
+        $query = Tiket::with(['pelanggan', 'kategori'])->latest();
+
+        // Jika ada input pencarian nama pelanggan
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('pelanggan', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        // Jika ada pilihan filter kategori
+        if ($request->filled('kategori')) {
+            $query->where('kategori_id', $request->kategori);
+        }
+
+        // Eksekusi query
+        $tikets = $query->get();
+
+        // Jangan lupa tambahkan 'kategoris' di dalam compact
+        return view('pimpinan-dashboard', compact('totalAdmin', 'totalTeknisi', 'totalPelanggan', 'users', 'tikets', 'kategoris'));
     }
 
     // Fungsi untuk menampilkan form tambah pengguna
@@ -184,16 +209,15 @@ class SuperAdminController extends Controller
 
     public function approveTeknisi($id)
     {
-        $user = User::findOrFail($id);
+        // 1. Cari user berdasarkan ID
+        $user = \App\Models\User::findOrFail($id);
 
-        if ($user->role !== 'teknisi') {
-            return back()->with('error', 'Hanya teknisi yang bisa divalidasi.');
-        }
-
+        // 2. Ubah status is_approved menjadi true/1
         $user->is_approved = true;
         $user->save();
 
-        return back()->with('success', 'Teknisi berhasil divalidasi.');
+        // 3. Kembali ke halaman sebelumnya dengan pesan sukses
+        return redirect()->back()->with('success', 'Akun teknisi berhasil divalidasi!');
     }
 
     public function validasiTeknisi()
