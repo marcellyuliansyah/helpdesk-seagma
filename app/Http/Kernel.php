@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'teknisi' => \App\Http\Middleware\RoleTeknisi::class,
         'pimpinan' => \App\Http\Middleware\SuperAdminMiddleware::class,
         'no-cache' => \App\Http\Middleware\PreventBackHistory::class,
+        'approved' => \App\Http\Middleware\EnsureAccountIsApproved::class,
     ];
 }

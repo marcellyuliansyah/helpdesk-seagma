@@ -61,4 +61,27 @@ class TeknisiController extends Controller
 
         return redirect()->route('teknisi.dashboard')->with('success', 'Kerja bagus! Laporan telah berhasil diselesaikan.');
     }
+
+    public function selesaikanTugas(Request $request, $id)
+{
+    $request->validate([
+        'foto_bukti' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    $tiket = Tiket::findOrFail($id);
+
+    if ($request->hasFile('foto_bukti')) {
+        $file = $request->file('foto_bukti');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->storeAs('public/bukti_selesai', $filename);
+        
+        // Simpan nama file ke database Anda
+        $tiket->foto_bukti = $filename;
+    }
+
+    $tiket->status = 'selesai';
+    $tiket->save();
+
+    return redirect()->back()->with('success', 'Tugas berhasil diselesaikan beserta foto bukti!');
+}
 }

@@ -55,16 +55,18 @@ class SuperAdminController extends Controller
     }
 
     // Fungsi untuk memproses penyimpanan data ke database
+    // Fungsi untuk memproses penyimpanan data ke database
     public function store(Request $request)
     {
+        // 1. Validasi Input
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            'ro
-            le' => ['required', 'string'],
+            'role' => ['required', 'string'], // <-- TYPO DIPERBAIKI DI SINI
         ]);
 
+        // 2. Simpan ke Database
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -73,7 +75,7 @@ class SuperAdminController extends Controller
             'is_approved' => $request->role === 'teknisi' ? false : true,
         ]);
 
-        // Kembali ke dashboard dengan pesan sukses
+        // 3. Kembali ke dashboard dengan pesan sukses
         return redirect()->route('pimpinan.dashboard')->with('success', 'Pengguna baru berhasil ditambahkan!');
     }
 

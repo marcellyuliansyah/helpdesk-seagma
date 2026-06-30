@@ -20,9 +20,9 @@
                 <div class="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                     <span class="text-[9px] font-bold text-red-600 uppercase tracking-[0.2em] block mb-1 font-tegas">Otorisasi Akun Baru</span>
                     <h2 class="text-2xl font-bold text-gray-950 font-tegas leading-none">
-                        Registrasi Kredensial Pengguna
+                        Registrasi Admin
                     </h2>
-                    <p class="text-xs text-gray-400 mt-1.5 font-light">Alokasikan hak akses dan identitas baru untuk masuk ke dalam ekosistem sistem utama.</p>
+                    <p class="text-xs text-gray-400 mt-1.5 font-light">Alokasikan hak akses dan identitas baru khusus untuk Operator Manajemen Harian.</p>
                 </div>
             </div>
 
@@ -52,13 +52,8 @@
 
                         <div class="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Tingkat Hak Akses / Otoritas (Role)</label>
-                            <select name="role" class="block w-full rounded-xl border-0 py-3.5 px-4 text-gray-950 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-1 focus:ring-inset focus:ring-gray-950 bg-white text-sm font-semibold outline-none transition-all cursor-pointer" required>
-                                <option value="" class="text-gray-400">-- Tentukan Spesifikasi Akses --</option>
-                                <option value="pelanggan">Pelanggan (Akses Front-End Laporan)</option>
-                                <option value="teknisi">Teknisi (Akses Penanganan & Resolusi)</option>
-                                <option value="admin">Administrator (Operator Manajemen Harian)</option>
-                                <option value="pimpinan">Pimpinan (Hak Akses Absolut / God Mode)</option>
-                            </select>
+                            <input type="hidden" name="role" value="admin">
+                            <input type="text" value="Administrator (Operator Manajemen Harian)" class="block w-full rounded-xl border-0 py-3.5 px-4 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-200 bg-gray-100/70 text-sm font-semibold outline-none cursor-not-allowed" disabled>
                         </div>
 
                         <div class="pt-6 border-t border-gray-50 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -68,7 +63,7 @@
                             </a>
 
                             <button type="submit" class="w-full sm:w-auto px-10 py-3.5 bg-gray-950 hover:bg-red-600 text-white text-xs font-bold uppercase tracking-[0.2em] rounded-full shadow-xl shadow-gray-950/10 hover:shadow-red-500/20 transition-all duration-300 transform hover:-translate-y-0.5">
-                                Terbitkan Akun
+                                Buat Akun Admin
                             </button>
                         </div>
                     </form>

@@ -84,21 +84,13 @@
                                         @endphp
 
                                         @if($role == 'teknisi')
-                                            <span class="inline-flex items-center rounded-full bg-[#334155] px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">
-                                                Teknisi
-                                            </span>
+                                            <span class="inline-flex items-center rounded-full bg-[#334155] px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">Teknisi</span>
                                         @elseif($role == 'admin')
-                                            <span class="inline-flex items-center rounded-full bg-red-500 px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">
-                                                Admin
-                                            </span>
+                                            <span class="inline-flex items-center rounded-full bg-red-500 px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">Admin</span>
                                         @elseif($role == 'pimpinan')
-                                            <span class="inline-flex items-center rounded-full bg-blue-500 px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">
-                                                Pimpinan
-                                            </span>
+                                            <span class="inline-flex items-center rounded-full bg-blue-500 px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">Pimpinan</span>
                                         @else
-                                            <span class="inline-flex items-center rounded-full bg-[#10b981] px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">
-                                                Pelanggan
-                                            </span>
+                                            <span class="inline-flex items-center rounded-full bg-[#10b981] px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">Pelanggan</span>
                                         @endif
                                     </td>
                                     <td class="py-4 px-6 text-center">
@@ -159,6 +151,7 @@
                                             <label class="block text-[13px] font-extrabold text-gray-700 uppercase tracking-wide">No. Telepon</label>
                                             <input type="text" name="no_telepon" class="mt-2 block w-full rounded-2xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-[#ef233c] sm:text-sm font-medium transition-all bg-[#f8f9fa] hover:bg-white">
                                         </div>
+                                        
                                         <div id="lokasi-pelanggan" class="md:col-span-2 pt-2">
                                             <div class="rounded-3xl bg-[#f8f9fa] p-6 border border-gray-100">
                                                 <h4 class="text-[15px] font-extrabold text-[#111827] mb-5 flex items-center gap-2">
@@ -169,7 +162,7 @@
                                                 </h4>
                                                 
                                                 <label class="block text-[12px] font-extrabold text-gray-600 uppercase tracking-wide mb-2">Alamat Lengkap</label>
-                                                <input type="text" name="alamat_lengkap" class="block w-full rounded-2xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-[#ef233c] sm:text-sm font-medium mb-6 bg-white">
+                                                <input type="text" id="alamat_lengkap" name="alamat_lengkap" class="block w-full rounded-2xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-[#ef233c] sm:text-sm font-medium mb-6 bg-white" placeholder="Tandai di peta untuk mengisi otomatis...">
                                                 
                                                 <label class="block text-[12px] font-extrabold text-gray-600 uppercase tracking-wide mb-3">Tandai Lokasi di Peta</label>
                                                 <div id="map" style="height:260px;width:100%;" class="rounded-2xl ring-1 ring-gray-200 shadow-inner z-0 relative mb-5"></div>
@@ -206,6 +199,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const roleSelect = document.getElementById('role');
             const lokasiBox = document.getElementById('lokasi-pelanggan');
+            const alamatInput = document.getElementById('alamat_lengkap');
             let map, marker;
             
             function toggleLokasi() {
@@ -219,6 +213,7 @@
             toggleLokasi();
             roleSelect.addEventListener('change', toggleLokasi);
 
+            // Default coordinate set (e.g., Lumajang area)
             let defaultLat = -8.1335;
             let defaultLng = 113.2248;
 
@@ -229,16 +224,39 @@
             document.getElementById('latitude').value = defaultLat;
             document.getElementById('longitude').value = defaultLng;
 
+            // Fungsi Reverse Geocoding menggunakan API Nominatim (Gratis OpenStreetMap)
+            async function fetchAddress(lat, lng) {
+                alamatInput.value = "Memuat alamat otomatis..."; 
+                try {
+                    // API Call ke Nominatim
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+                    const data = await response.json();
+                    
+                    if (data && data.display_name) {
+                        alamatInput.value = data.display_name; // Set response string ke input form
+                    } else {
+                        alamatInput.value = "Alamat tidak ditemukan.";
+                    }
+                } catch (error) {
+                    console.error("Gagal mendapatkan alamat:", error);
+                    alamatInput.value = "";
+                }
+            }
+
+            // Saat marker selesai di-drag
             marker.on('dragend', function() {
                 const pos = marker.getLatLng();
                 document.getElementById('latitude').value = pos.lat.toFixed(6);
                 document.getElementById('longitude').value = pos.lng.toFixed(6);
+                fetchAddress(pos.lat, pos.lng); // Memanggil fetchAddress
             });
 
+            // Saat peta diklik
             map.on('click', function(e) {
                 marker.setLatLng(e.latlng);
                 document.getElementById('latitude').value = e.latlng.lat.toFixed(6);
                 document.getElementById('longitude').value = e.latlng.lng.toFixed(6);
+                fetchAddress(e.latlng.lat, e.latlng.lng); // Memanggil fetchAddress
             });
 
             window.addEventListener('resize', function() {
