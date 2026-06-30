@@ -113,8 +113,8 @@ Route::middleware(['auth', 'admin', 'verified', 'no-cache'])->group(function () 
     Route::delete('/admin/kategori/{id}', [App\Http\Controllers\AdminController::class, 'destroyKategori'])->name('admin.kategori.destroy');
 });
 
-// --- RUTE KHUSUS TEKNISI ---
-Route::middleware(['auth', 'teknisi', 'verified', 'no-cache'])->group(function () {
+// --- RUTE KHUSUS TEKNISI (SUDAH DIBERI FILTER APPROVED) ---
+Route::middleware(['auth', 'teknisi', 'approved', 'verified', 'no-cache'])->group(function () {
 
     // Halaman Dashboard Teknisi
     Route::get('/teknisi/dashboard', [App\Http\Controllers\TeknisiController::class, 'index'])->name('teknisi.dashboard');
@@ -122,7 +122,7 @@ Route::middleware(['auth', 'teknisi', 'verified', 'no-cache'])->group(function (
     // Rute untuk "Ambil Tiket"
     Route::patch('/teknisi/pengaduan/{id}/ambil', [App\Http\Controllers\TeknisiController::class, 'ambilTiket'])->name('teknisi.pengaduan.ambil');
 
-    // Rute untuk "Selesaikan Tiket" (TAMBAHKAN BARIS INI)
+    // Rute untuk "Selesaikan Tiket"
     Route::patch('/teknisi/pengaduan/{id}/selesai', [App\Http\Controllers\TeknisiController::class, 'selesaikanTiket'])->name('teknisi.pengaduan.selesai');
 });
 
@@ -156,7 +156,6 @@ Route::delete('/pelanggan/pengaduan/{id}', [TiketController::class, 'destroy'])
     ->name('pengaduan.destroy');
 
 // --- RUTE KHUSUS PIMPINAN ---
-// --- RUTE KHUSUS PIMPINAN ---
 Route::middleware(['auth', 'pimpinan', 'verified', 'no-cache'])->group(function () {
     
     // 1. Dashboard & Data Users
@@ -172,14 +171,10 @@ Route::middleware(['auth', 'pimpinan', 'verified', 'no-cache'])->group(function 
     
     // 3. Rute Validasi Akun
     Route::get('/pimpinan/validasi-teknisi', [App\Http\Controllers\SuperAdminController::class, 'validasiTeknisi'])->name('pimpinan.validasi.teknisi');
-    // CATATAN: Sebelumnya ada 2 rute 'approve' yang sama persis. Saya jadikan satu ke method approveUser. 
-    // Pastikan bagian ini memanggil 'approveTeknisi', BUKAN 'approveUser'
-Route::patch('/pimpinan/users/{id}/approve', [App\Http\Controllers\SuperAdminController::class, 'approveTeknisi'])->name('pimpinan.users.approve');
+    Route::patch('/pimpinan/users/{id}/approve', [App\Http\Controllers\SuperAdminController::class, 'approveTeknisi'])->name('pimpinan.users.approve');
 
     // 4. Rute Manajemen Tiket (GOD MODE)
     Route::get('/pimpinan/tiket', [App\Http\Controllers\SuperAdminController::class, 'allTiket'])->name('pimpinan.tiket.index');
-    
-    // 🔽 INI ADALAH RUTE YANG BARU DITAMBAHKAN UNTUK MENGATASI ERROR:
     Route::get('/pimpinan/tiket/{id}/detail', [App\Http\Controllers\SuperAdminController::class, 'showTiket'])->name('pimpinan.tiket.show');
     
     Route::put('/pimpinan/tiket/{id}/reassign', [App\Http\Controllers\SuperAdminController::class, 'reassignTiket'])->name('pimpinan.tiket.reassign');

@@ -41,7 +41,6 @@
 
     {{-- ================= HEADER BAR ================= --}}
     
-
     <div class="relative min-h-screen bg-white bg-gradient-to-b from-white via-white to-slate-100/50 pb-16">
         <div class="fixed inset-0 z-0 bg-grid-pattern opacity-50"></div>
         <div class="fixed top-[-5%] right-[-5%] w-[600px] h-[600px] bg-red-50/30 rounded-full blur-[130px] z-0 pointer-events-none"></div>
@@ -176,13 +175,37 @@
                                         <p class="text-[11px] text-gray-500 font-light leading-relaxed">{{ $tiket->deskripsi }}</p>
                                     </div>
 
-                                    <form action="{{ route('teknisi.pengaduan.selesai', $tiket->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin sudah selesai memperbaiki gangguan ini?');" class="pt-2">
+                                    {{-- FORM PENYELESAIAN TUGAS (MENGGUNAKAN KAMERA) --}}
+                                    <form action="{{ route('teknisi.pengaduan.selesai', $tiket->id) }}" method="POST" enctype="multipart/form-data" class="pt-2 space-y-3">
                                         @csrf @method('PATCH')
-                                        <button type="submit" class="w-full flex justify-center items-center py-3 bg-gray-950 hover:bg-red-600 text-white text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg transition-all duration-300">
-                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                        
+                                        {{-- AREA UPLOAD FOTO BUKTI --}}
+                                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 border-dashed">
+                                            <label for="foto_bukti_{{ $tiket->id }}" class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-2">
+                                                Ambil Foto Bukti Selesai (Kamera HP) <span class="text-red-500">*</span>
+                                            </label>
+                                            
+                                            <input type="file" 
+                                                   id="foto_bukti_{{ $tiket->id }}" 
+                                                   name="foto_bukti" 
+                                                   accept="image/*" 
+                                                   capture="environment"
+                                                   required
+                                                   class="block w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-900 file:text-white hover:file:bg-red-600 transition-all cursor-pointer">
+                                                   
+                                            <p class="text-[9px] text-gray-400 mt-1.5 font-light">
+                                                Format: JPG, PNG. Maksimal 5MB. Klik tombol di atas untuk langsung membuka kamera belakang HP Anda.
+                                            </p>
+                                        </div>
+
+                                        <button type="submit" onclick="return confirm('Apakah Anda yakin sudah mengunggah foto bukti yang benar dan menyelesaikan gangguan ini?');" class="w-full flex justify-center items-center py-3 bg-gray-950 hover:bg-red-600 text-white text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg transition-all duration-300">
+                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                                            </svg>
                                             Selesaikan Tugas Lapangan
                                         </button>
                                     </form>
+
                                 </div>
 
                                 <div class="lg:col-span-7 flex flex-col">
