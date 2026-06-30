@@ -75,14 +75,88 @@
                 </div>
             @endif
 
-            <div class="flex items-center sm:hidden shrink-0 ml-4">
+            {{-- <div class="flex items-center sm:hidden shrink-0 ml-4">
                 <button @click="mobileMenuOpen = !mobileMenuOpen" class="inline-flex items-center justify-center p-2.5 rounded-xl text-gray-500 hover:text-gray-900 bg-gray-50/80 border border-gray-100/80 focus:outline-none transition-all duration-200">
                     <svg class="h-5 w-5" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': mobileMenuOpen, 'inline-flex': !mobileMenuOpen }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': !mobileMenuOpen, 'inline-flex': mobileMenuOpen }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
-            </div>
+            </div> --}}
+            {{-- MOBILE MENU → LANGSUNG TAMPIL TANPA BURGER --}}
+@if (Route::has('login'))
+
+<div class="sm:hidden shrink-0 ml-4">
+
+    @auth
+
+        <a
+            href="{{ url('/dashboard') }}"
+            class="
+            inline-flex
+            items-center
+            justify-center
+
+            px-5
+            py-2.5
+
+            rounded-xl
+
+            bg-gray-900
+            text-white
+
+            text-xs
+            font-bold
+            uppercase
+            tracking-widest
+
+            shadow-md
+
+            active:scale-95
+            transition">
+
+            Dashboard
+
+        </a>
+
+    @else
+
+        <a
+            href="{{ route('login') }}"
+            class="
+            inline-flex
+            items-center
+            justify-center
+
+            px-5
+            py-2.5
+
+            rounded-xl
+
+            bg-red-600
+            hover:bg-red-700
+
+            text-white
+
+            text-xs
+            font-bold
+            uppercase
+            tracking-widest
+
+            shadow-md
+
+            active:scale-95
+            transition">
+
+            Log In
+
+        </a>
+
+    @endauth
+
+</div>
+
+@endif
 
         </div>
     </div>

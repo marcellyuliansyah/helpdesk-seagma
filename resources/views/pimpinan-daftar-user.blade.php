@@ -45,13 +45,11 @@
     </div>
 
 
-    {{-- ACTION BUTTON --}}
-    <div class="flex items-center gap-3">
 
-        {{-- Tombol Tambah Admin (muncul hanya halaman admin) --}}
+    <div class="flex items-center gap-3">
         @if(request()->role === 'admin')
 
-            <a href="{{ route('pimpinan.users.create') }}"
+            {{-- <a href="{{ route('pimpinan.users.create') }}"
                 class="px-5 py-3 rounded-full bg-red-600 text-white text-xs uppercase font-bold hover:bg-red-700 transition flex items-center gap-2 shadow">
 
                 <svg class="w-4 h-4"
@@ -68,12 +66,12 @@
 
                 Tambah Admin
 
-            </a>
+            </a> --}}
 
         @endif
 
 
-        {{-- Tombol kembali tetap ada --}}
+        
         <a href="{{ route('pimpinan.dashboard') }}"
             class="px-5 py-3 rounded-full bg-gray-900 text-white text-xs uppercase font-bold hover:bg-red-600 transition">
 
