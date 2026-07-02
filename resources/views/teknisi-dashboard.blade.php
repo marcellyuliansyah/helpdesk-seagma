@@ -180,7 +180,7 @@
                                         @csrf @method('PATCH')
                                         
                                         {{-- AREA UPLOAD FOTO BUKTI --}}
-                                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 border-dashed">
+                                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-500 border-dashed">
                                             <label for="foto_bukti_{{ $tiket->id }}" class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-2">
                                                 Ambil Foto Bukti Selesai (Kamera HP) <span class="text-red-500">*</span>
                                             </label>
@@ -191,9 +191,9 @@
                                                    accept="image/*" 
                                                    capture="environment"
                                                    required
-                                                   class="block w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-900 file:text-white hover:file:bg-red-600 transition-all cursor-pointer">
+                                                   class="block w-full text-xs text-black file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-900 file:text-white hover:file:bg-red-600 transition-all cursor-pointer">
                                                    
-                                            <p class="text-[9px] text-gray-400 mt-1.5 font-light">
+                                            <p class="text-[9px] text-black mt-1.5 font-light">
                                                 Format: JPG, PNG. Maksimal 5MB. Klik tombol di atas untuk langsung membuka kamera belakang HP Anda.
                                             </p>
                                         </div>

@@ -10,7 +10,6 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Latar belakang grid yang disesuaikan persis dengan foto dasbor */
         .bg-grid-pattern {
             background-image: linear-gradient(to right, #f1f5f9 1px, transparent 1px), linear-gradient(to bottom, #f1f5f9 1px, transparent 1px);
             background-size: 3rem 3rem;
@@ -132,8 +131,44 @@
                                 <div>
                                     <p class="text-[11px] font-bold text-slate-400 uppercase mb-1 font-tegas">Alamat Pemasangan</p>
                                     <p class="text-sm font-medium text-slate-700 leading-relaxed">{{ $tiket->pelanggan->alamat_lengkap ?? '-' }}</p>
-                                end</div>
+                                </div>
                             </div>
+                        </div>
+
+                        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)]">
+                            <h4 class="text-sm font-bold text-[#111c2a] mb-6 font-tegas flex items-center gap-2.5 border-b border-slate-50 pb-4">
+                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                Bukti Foto Penanganan
+                            </h4>
+
+                            @if ($tiket->bukti_foto)
+                                <div class="relative bg-slate-50 rounded-2xl border border-slate-100 shadow-inner p-2 flex justify-center items-center">
+                                    <a href="{{ asset('storage/' . $tiket->bukti_foto) }}" target="_blank" class="block group cursor-pointer relative">
+                                        <img src="{{ asset('storage/' . $tiket->bukti_foto) }}" alt="Bukti Foto Teknisi" class="max-w-full rounded-xl object-contain max-h-[400px] transition-opacity duration-300 group-hover:opacity-90">
+                                        
+                                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                                            <div class="bg-black/50 text-white p-3 rounded-full backdrop-blur-sm">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <p class="text-[11px] font-medium text-slate-400 text-center mt-4">Klik gambar untuk melihat resolusi penuh</p>
+                            @else
+                                <div class="text-center py-12 bg-[#f8fafc] rounded-2xl border-2 border-dashed border-slate-200">
+                                    <div class="bg-slate-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm font-bold text-slate-500 font-tegas">Belum Ada Bukti Foto</p>
+                                    <p class="text-xs text-slate-400 mt-1">Teknisi belum mengunggah dokumentasi perbaikan</p>
+                                </div>
+                            @endif
                         </div>
                     </div>
 
@@ -205,6 +240,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // Koordinat dinamis (dengan fallback default jika kosong)
         var lat = {{ $tiket->latitude ?? -8.1331 }};
         var lng = {{ $tiket->longitude ?? 113.2223 }};
 
