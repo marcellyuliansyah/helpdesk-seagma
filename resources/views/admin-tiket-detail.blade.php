@@ -132,10 +132,33 @@
                                 <div>
                                     <p class="text-[11px] font-bold text-slate-400 uppercase mb-1 font-tegas">Alamat Pemasangan</p>
                                     <p class="text-sm font-medium text-slate-700 leading-relaxed">{{ $tiket->pelanggan->alamat_lengkap ?? '-' }}</p>
-                                end</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
+                        @if ($tiket->foto_bukti)
+                            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] animate-fade-in">
+                                <h4 class="text-sm font-bold text-[#111c2a] mb-6 font-tegas flex items-center gap-2.5 border-b border-slate-50 pb-4">
+                                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    Bukti Penanganan Teknisi
+                                </h4>
+                                
+                                <div class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 shadow-inner group">
+                                    <img src="{{ asset('storage/' . $tiket->foto_bukti) }}" alt="Foto Bukti Teknisi" class="w-full h-auto object-contain max-h-[500px] transition-transform duration-500 group-hover:scale-[1.02]">
+                                    
+                                    <a href="{{ asset('storage/' . $tiket->foto_bukti) }}" target="_blank" class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-xl text-slate-700 hover:text-[#111c2a] shadow-sm transition-all duration-300 opacity-0 group-hover:opacity-100">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-4 text-center font-medium">Foto diunggah pada saat status laporan diselesaikan.</p>
+                            </div>
+                        @endif
+                        </div>
 
                     <div class="space-y-8">
                         

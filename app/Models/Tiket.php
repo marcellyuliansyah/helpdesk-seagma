@@ -18,6 +18,7 @@ class Tiket extends Model
         'status',
         'latitude',
         'longitude',
+        'foto_bukti',
     ];
 
     // INI YANG HARUS DITAMBAHKAN: Relasi ke tabel users

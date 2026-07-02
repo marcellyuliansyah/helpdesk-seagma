@@ -60,4 +60,32 @@ class TiketController extends Controller
             ->route('pelanggan.dashboard')
             ->with('success', 'Pengaduan berhasil dikirim');
     }
+
+    // Fungsi untuk teknisi menyelesaikan tugas dan upload foto bukti
+    public function selesai(Request $request, $id)
+    {
+        // 1. Validasi input file dari form kamera teknisi
+        $request->validate([
+            'foto_bukti' => 'required|image|mimes:jpeg,png,jpg|max:5120', // Maksimal 5MB
+        ]);
+
+        // 2. Cari tiket berdasarkan ID
+        $tiket = Tiket::findOrFail($id);
+
+        // 3. Proses upload foto ke folder storage/app/public/bukti_selesai
+        if ($request->hasFile('foto_bukti')) {
+            $file = $request->file('foto_bukti');
+            $path = $file->store('bukti_selesai', 'public');
+            
+            // Simpan lokasi file (path) ke database
+            $tiket->foto_bukti = $path;
+        }
+
+        // 4. Ubah status tiket menjadi selesai (sesuaikan penulisan status dengan sistemmu)
+        $tiket->status = 'selesai'; 
+        $tiket->save();
+
+        // 5. Kembalikan teknisi ke halaman dashboard dengan pesan sukses
+        return redirect()->back()->with('success', 'Tugas berhasil diselesaikan! Bukti foto sudah tersimpan untuk Admin.');
+    }
 }

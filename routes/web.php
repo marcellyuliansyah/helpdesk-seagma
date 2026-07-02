@@ -124,6 +124,8 @@ Route::middleware(['auth', 'teknisi', 'approved', 'verified', 'no-cache'])->grou
 
     // Rute untuk "Selesaikan Tiket"
     Route::patch('/teknisi/pengaduan/{id}/selesai', [App\Http\Controllers\TeknisiController::class, 'selesaikanTiket'])->name('teknisi.pengaduan.selesai');
+
+    Route::patch('/teknisi/pengaduan/{id}/selesai', [TiketController::class, 'selesai'])->name('teknisi.pengaduan.selesai')->middleware('auth');
 });
 
 // --- RUTE KHUSUS PELANGGAN ---

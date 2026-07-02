@@ -37,8 +37,7 @@
 
         .company-tag {
             font-size: 9px;
-            color: #e53e3e;
-            /* Warna Merah Telkom / Seagma */
+            color: #e53e3e; /* Warna Merah Telkom / Seagma */
             font-weight: bold;
             letter-spacing: 1.5px;
             text-transform: uppercase;
@@ -84,13 +83,13 @@
             text-transform: uppercase;
             font-size: 8.5px;
             letter-spacing: 0.8px;
-            padding: 10px 12px;
+            padding: 10px 8px; /* Padding disesuaikan */
             border-bottom: 2px solid #e2e8f0;
             text-align: left;
         }
 
         td {
-            padding: 12px 12px;
+            padding: 12px 8px; /* Padding disesuaikan */
             border-bottom: 1px solid #edf2f7;
             color: #2d3748;
             vertical-align: top;
@@ -122,20 +121,23 @@
         }
 
         .status-menunggu {
-            color: #dd6b20;
+            color: #dd6b20; /* Oranye */
         }
-
-        /* Oranye Kebasasan */
         .status-diproses {
-            color: #3182ce;
+            color: #3182ce; /* Biru Korporat */
         }
-
-        /* Biru Korporat */
         .status-selesai {
-            color: #38a169;
+            color: #38a169; /* Hijau Daun */
         }
 
-        /* Hijau Daun */
+        /* CSS untuk Foto Bukti */
+        .foto-bukti {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #cbd5e0;
+        }
     </style>
 </head>
 
@@ -156,31 +158,37 @@
     <table>
         <thead>
             <tr>
-                <th width="5%" class="text-center">No</th>
-                <th width="12%" class="text-center">Tgl. Masuk</th>
-                <th width="20%">Pelanggan</th>
-                <th width="35%">Deskripsi Masalah / Gangguan</th>
+                <th width="4%" class="text-center">No</th>
+                <th width="10%" class="text-center">Tgl. Masuk</th>
+                <th width="16%">Pelanggan</th>
+                <th width="28%">Deskripsi Masalah</th>
                 <th width="16%">Teknisi Lapangan</th>
-                <th width="12%" class="text-center">Status</th>
-            </tr>
+                <th width="10%" class="text-center">Status</th>
+                <th width="16%" class="text-center">Bukti Foto</th> </tr>
         </thead>
         <tbody>
             @foreach ($tikets as $index => $tiket)
                 <tr>
                     <td class="text-center font-mono" style="padding-top: 14px;">{{ $index + 1 }}</td>
+                    
                     <td class="text-center font-mono" style="padding-top: 14px;">
-                        {{ \Carbon\Carbon::parse($tiket->created_at)->format('d/m/Y') }}</td>
+                        {{ \Carbon\Carbon::parse($tiket->created_at)->format('d/m/Y') }}
+                    </td>
+                    
                     <td>
                         <div style="font-weight: bold; color: #1a202c; font-size: 11.5px;">
                             {{ $tiket->pelanggan ? Str::upper($tiket->pelanggan->name) : '-' }}
                         </div>
                         <div style="font-size: 9.5px; color: #a0aec0; margin-top: 2px;">ID: {{ $tiket->user_id }}</div>
                     </td>
+                    
                     <td>
                         <div style="font-weight: bold; color: #2d3748;">{{ $tiket->judul }}</div>
                         <div style="font-size: 10px; color: #718096; margin-top: 3px; pr-4">
-                            {{ Str::limit($tiket->deskripsi, 80) }}</div>
+                            {{ Str::limit($tiket->deskripsi, 80) }}
+                        </div>
                     </td>
+                    
                     <td>
                         @if ($tiket->teknisi)
                             <div style="font-weight: 600; color: #2b6cb0;">
@@ -190,12 +198,23 @@
                             <div style="color: #a0aec0; font-style: italic; font-size: 10px;">Belum Ditunjuk</div>
                         @endif
                     </td>
+                    
                     <td class="text-center status 
                         @if ($tiket->status == 'menunggu verifikasi') status-menunggu
                         @elseif($tiket->status == 'diproses') status-diproses
                         @else status-selesai @endif"
                         style="padding-top: 14px;">
                         {{ $tiket->status == 'menunggu verifikasi' ? 'menunggu' : $tiket->status }}
+                    </td>
+
+                    <td class="text-center">
+                        @if ($tiket->foto_bukti)
+                            <img src="{{ public_path('storage/' . $tiket->foto_bukti) }}" class="foto-bukti" alt="Bukti">
+                        @else
+                            <div style="font-size: 9px; color: #cbd5e0; margin-top: 10px; font-style: italic;">
+                                - Tidak ada -
+                            </div>
+                        @endif
                     </td>
                 </tr>
             @endforeach
