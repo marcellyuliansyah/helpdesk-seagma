@@ -104,7 +104,8 @@ Route::middleware([
     Route::patch('/pimpinan/user/{id}/tolak', [AdminController::class, 'tolakUser']);
 });
 
-Route::get('/admin/laporan/pdf', [App\Http\Controllers\AdminController::class, 'cetakPDF'])->name('admin.laporan.pdf');
+// BAGIAN INI YANG DIUBAH: admin.laporan.pdf -> admin.cetak.pdf
+Route::get('/admin/laporan/pdf', [App\Http\Controllers\AdminController::class, 'cetakPDF'])->name('admin.cetak.pdf');
 
 // --- RUTE MASTER DATA KATEGORI ---
 Route::middleware(['auth', 'admin', 'verified', 'no-cache'])->group(function () {

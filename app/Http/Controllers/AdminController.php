@@ -8,6 +8,7 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf; // <-- Alat pembuat PDF
 use App\Models\Kategori;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -90,24 +91,46 @@ class AdminController extends Controller
             ->with('success', 'Teknisi berhasil ditugaskan.');
     }
 
-    public function cetakPDF()
+    /**
+     * Fungsi Cetak PDF dengan Filter Bulan & Tahun Opsional
+     */
+    public function cetakPDF(Request $request)
     {
-        $tikets = Tiket::with([
+        // Mengambil parameter input filter bulan dan tahun dari form/URL request
+        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun', date('Y')); // Default menggunakan tahun saat ini jika kosong
+
+        $query = Tiket::with([
             'pelanggan',
             'teknisi',
             'kategori'
-        ])->latest()->get();
+        ]);
 
+        // Logika pengecekan pemfilteran data
+        if (!empty($bulan)) {
+            $query->whereMonth('created_at', $bulan)
+                  ->whereYear('created_at', $tahun);
+            
+            // Konversi angka bulan & tahun menjadi string teks nama bulan Indonesia (Contoh: "Juli 2026")
+            $periode = Carbon::createFromDate($tahun, $bulan, 1)->translatedFormat('F Y');
+            $namaFile = 'Laporan_Pengaduan_' . Carbon::createFromDate($tahun, $bulan, 1)->format('m_Y');
+        } else {
+            $periode = 'Semua Waktu';
+            $namaFile = 'Laporan_Pengaduan_Semua_Waktu_' . date('Y-m-d');
+        }
+
+        // Ambil data berdasarkan filter yang ditentukan
+        $tikets = $query->latest()->get();
+
+        // Kirim variabel $tikets dan $periode ke view PDF
         $pdf = Pdf::loadView(
             'admin-laporan-pdf',
-            compact('tikets')
+            compact('tikets', 'periode')
         );
 
         $pdf->setPaper('a4', 'landscape');
 
-        return $pdf->download(
-            'Laporan_Pengaduan_' . date('Y-m-d') . '.pdf'
-        );
+        return $pdf->download($namaFile . '.pdf');
     }
 
     // --- FUNGSI MASTER DATA KATEGORI ---
