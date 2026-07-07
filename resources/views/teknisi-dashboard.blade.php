@@ -40,7 +40,6 @@
     </style>
 
     {{-- ================= HEADER BAR ================= --}}
-    
     <div class="relative min-h-screen bg-white bg-gradient-to-b from-white via-white to-slate-100/50 pb-16">
         <div class="fixed inset-0 z-0 bg-grid-pattern opacity-50"></div>
         <div class="fixed top-[-5%] right-[-5%] w-[600px] h-[600px] bg-red-50/30 rounded-full blur-[130px] z-0 pointer-events-none"></div>
@@ -123,18 +122,18 @@
                         </div>
                     </div>
 
-                    {{-- ANTREAN TERSEDIA — red card --}}
+                    {{-- TOTAL SELESAI — red card --}}
                     <div class="stat-glow relative overflow-hidden bg-red-600 rounded-[2rem] p-6 shadow-xl shadow-red-200/40 flex items-center justify-between">
                         <div class="absolute -right-6 -bottom-8 w-28 h-28 rounded-full bg-white/10"></div>
                         <div class="relative z-10">
                             <p class="text-[10px] font-bold text-white/80 uppercase tracking-widest">
-                                Antrean Tiket Tersedia
+                                Perbaikan Selesai
                             </p>
                             <p class="text-4xl font-extrabold text-white font-tegas mt-1">
-                                {{ $tiketTersedia->count() }}
+                                {{ $totalSelesai ?? 0 }}
                             </p>
                             <p class="text-[10px] text-white/80 mt-2 font-medium">
-                                Menunggu untuk diambil
+                                Total diselesaikan oleh Anda
                             </p>
                         </div>
                         <div class="relative z-10 w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center text-white shrink-0">
@@ -142,6 +141,28 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
+                    </div>
+                </div>
+                
+                {{-- ================= INDIKATOR STATUS KEHADIRAN (READ ONLY - KENDALI ADMIN) ================= --}}
+                <div class="bg-white rounded-[2rem] p-6 shadow-xl shadow-gray-200/20 border border-gray-100/50 flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden">
+                    <div class="flex items-center gap-3.5 text-center sm:text-left">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 {{ auth()->user()->status === 'libur' ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600' }}">
+                            <span class="w-3 h-3 rounded-full {{ auth()->user()->status === 'libur' ? 'bg-red-500' : 'bg-emerald-500 animate-pulse' }}"></span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-900 font-tegas uppercase tracking-wide">Status Operasional Anda</p>
+                            <p class="text-[11px] text-gray-500 mt-0.5">
+                                Status Anda saat ini ditentukan oleh Admin: 
+                                <span class="font-bold {{ auth()->user()->status === 'libur' ? 'text-red-600' : 'text-emerald-600' }}">
+                                    {{ auth()->user()->status === 'libur' ? '🔴 Sedang Libur / Off Shift' : '🟢 Masuk Kerja / Siaga (Standby)' }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-[10px] text-slate-400 italic text-center sm:text-right bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                        *Perubahan jadwal shift & libur dikendalikan terpusat oleh Admin.
                     </div>
                 </div>
 
@@ -170,7 +191,7 @@
                                     </div>
 
                                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 flex-1 flex flex-col justify-start">
-                                        <span class="text-[9px] font-bold text-red-500 uppercase tracking-wider block mb-1">Detail Keluhan</span>
+                                        <span class="text-[9px] font-bold text-red-500 uppercase tracking-wider block mb-1">Detail Keluhan (Instruksi Admin)</span>
                                         <p class="text-xs font-semibold text-gray-800 mb-1">{{ $tiket->judul }}</p>
                                         <p class="text-[11px] text-gray-500 font-light leading-relaxed">{{ $tiket->deskripsi }}</p>
                                     </div>
@@ -224,82 +245,10 @@
                             </div>
                         </div>
                         @empty
-                        <div class="px-6 py-12 text-center text-xs text-gray-400 font-light uppercase tracking-wider">Anda belum mengambil tugas apapun saat ini.</div>
-                        @endforelse
-                    </div>
-                </div>
-
-                {{-- ================= ANTREAN TIKET TERSEDIA ================= --}}
-                <div class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/20 border border-gray-100/50 overflow-hidden">
-                    <div class="px-6 py-5 border-b border-gray-50 bg-gray-50/20">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 font-tegas">Antrean Tiket Tersedia</h3>
-                    </div>
-
-                    <div class="hidden md:block overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead>
-                                <tr class="text-[10px] text-gray-400 uppercase tracking-[0.15em] bg-gray-50/50 border-b border-gray-50">
-                                    <th class="px-6 py-4 font-bold">Pelanggan</th>
-                                    <th class="px-6 py-4 font-bold">Detail Keluhan</th>
-                                    <th class="px-6 py-4 font-bold">Waktu Masuk</th>
-                                    <th class="px-6 py-4 font-bold text-center w-36">Tindakan</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-50">
-                                @forelse($tiketTersedia as $tiket)
-                                <tr class="hover:bg-gray-50/40 transition">
-                                    <td class="px-6 py-4">
-                                        <p class="text-xs font-bold text-gray-900 uppercase tracking-wide">{{ $tiket->user->name ?? 'User Tidak Ditemukan' }}</p>
-                                        <p class="text-[10px] text-gray-400 font-mono mt-0.5">#{{ $tiket->nomor_tiket }}</p>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <p class="text-xs font-semibold text-gray-800">{{ $tiket->judul }}</p>
-                                        <p class="text-[11px] text-gray-400 font-light mt-0.5 max-w-xs truncate">{{ $tiket->deskripsi }}</p>
-                                    </td>
-                                    <td class="px-6 py-4 text-xs text-gray-500 font-light">
-                                        {{ $tiket->created_at->diffForHumans() }}
-                                    </td>
-                                    <td class="px-6 py-4 text-center">
-                                        <form action="{{ route('teknisi.pengaduan.ambil', $tiket->id) }}" method="POST">
-                                            @csrf @method('PATCH')
-                                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-emerald-50 hover:bg-emerald-600 border border-emerald-100 text-emerald-600 hover:text-white text-[10px] font-bold uppercase tracking-wider rounded-xl transition-all duration-300">
-                                                Ambil Tugas
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="px-6 py-12 text-center text-xs text-gray-400 font-light uppercase tracking-wider">Hebat! Semua tiket gangguan sudah bersih ditangani.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="block md:hidden divide-y divide-gray-100">
-                        @forelse($tiketTersedia as $tiket)
-                        <div class="p-5 space-y-3">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h4 class="text-sm font-bold text-gray-900 uppercase tracking-wide font-tegas">{{ $tiket->pelanggan->name ?? 'User Tidak Ditemukan' }}</h4>
-                                    <span class="text-[10px] text-gray-400 font-mono">#{{ $tiket->nomor_tiket }}</span>
-                                </div>
-                                <span class="text-[9px] text-gray-400 font-medium bg-gray-100 px-2 py-0.5 rounded-full">{{ $tiket->created_at->diffForHumans() }}</span>
-                            </div>
-                            <div class="bg-gray-50 p-3 rounded-xl border border-gray-100/50">
-                                <p class="text-xs font-bold text-gray-800">{{ $tiket->judul }}</p>
-                                <p class="text-[11px] text-gray-400 font-light mt-1">{{ Str::limit($tiket->deskripsi, 80) }}</p>
-                            </div>
-                            <form action="{{ route('teknisi.pengaduan.ambil', $tiket->id) }}" method="POST">
-                                @csrf @method('PATCH')
-                                <button type="submit" class="w-full flex justify-center py-3 bg-gray-950 hover:bg-red-600 text-white text-xs font-bold uppercase tracking-widest rounded-xl shadow-md transition-all duration-300">
-                                    Ambil Alih Tugas Ini
-                                </button>
-                            </form>
+                        <div class="px-6 py-16 text-center">
+                            <h4 class="text-sm font-bold text-gray-900 font-tegas">Belum Ada Penugasan Aktif</h4>
+                            <p class="text-xs text-gray-500 mt-1 max-w-sm mx-auto">Anda saat ini sedang dalam status <span class="text-emerald-600 font-bold">Siaga (Standby)</span>. Silakan tunggu instruksi kerja (*work order*) yang didistribusikan langsung oleh Admin.</p>
                         </div>
-                        @empty
-                        <div class="p-8 text-center text-xs text-gray-400 font-light uppercase tracking-wider">Hebat! Semua tiket gangguan sudah bersih ditangani.</div>
                         @endforelse
                     </div>
                 </div>

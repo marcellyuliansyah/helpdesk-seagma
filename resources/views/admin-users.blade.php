@@ -26,17 +26,17 @@
             @endif
 
             <div class="mb-8">
-                <a href="javascript:history.back()" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-gray-800 transition-colors group">
+                <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-gray-800 transition-colors group">
                     <div class="p-2 rounded-full bg-white shadow-sm ring-1 ring-gray-200 mr-2 group-hover:bg-gray-50 group-hover:ring-gray-300 transition-all">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
                     </div>
-                    Kembali
+                    Kembali ke Dashboard
                 </a>
             </div>
 
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10 gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
                 <div class="flex items-center gap-5">
                     <div class="flex h-16 w-16 items-center justify-center rounded-full bg-[#ef233c] text-white shadow-lg shadow-red-200/60 border-[3px] border-white">
                         <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
@@ -60,6 +60,35 @@
                 </div>
             </div>
 
+            {{-- ================= FORM PENCARIAN & FILTER OTOMATIS ================= --}}
+            <div class="mb-6 bg-white p-4 rounded-[1.5rem] shadow-sm border border-gray-100">
+                <form action="{{ route('admin.users') }}" method="GET" class="flex flex-col sm:flex-row gap-3 items-center w-full">
+                    
+                    <div class="flex-1 w-full relative">
+                        <input type="text" name="search" id="searchInput" value="{{ request('search') }}" autocomplete="off" placeholder="Ketik nama, email, atau ID untuk mencari..." 
+                            class="block w-full px-4 py-3 bg-gray-50 border-0 text-sm font-medium text-gray-900 rounded-xl ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-[#ef233c] transition-all">
+                    </div>
+                    
+                    <div class="w-full sm:w-48 flex-none">
+                        <select name="role" onchange="this.form.submit()" class="block w-full py-3 px-4 bg-gray-50 border-0 text-sm font-extrabold text-gray-700 rounded-xl ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-[#ef233c] transition-all cursor-pointer">
+                            <option value="">Semua Peran</option>
+                            <option value="pelanggan" {{ request('role') == 'pelanggan' ? 'selected' : '' }}>Pelanggan</option>
+                            <option value="teknisi" {{ request('role') == 'teknisi' ? 'selected' : '' }}>Teknisi</option>
+                        </select>
+                    </div>
+                    
+                    @if(request('search') || request('role'))
+                        <div class="w-full sm:w-auto flex-none">
+                            <a href="{{ route('admin.users') }}" class="w-full sm:w-auto px-5 py-3 bg-red-50 text-red-600 text-sm font-bold rounded-xl hover:bg-red-100 transition-all border border-red-100 text-center flex items-center justify-center gap-1.5 whitespace-nowrap">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                                Clear Filter
+                            </a>
+                        </div>
+                    @endif
+                </form>
+            </div>
+
+            {{-- ================= TABEL DATA PENGGUNA ================= --}}
             <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden p-2 sm:p-4">
                 <div class="overflow-x-auto rounded-[1.5rem]">
                     <table class="w-full text-left border-collapse min-w-max">
@@ -67,49 +96,91 @@
                             <tr class="border-b-2 border-gray-100">
                                 <th class="py-5 px-6 font-extrabold text-gray-400 uppercase tracking-wider text-[11px] w-20">ID</th>
                                 <th class="py-5 px-6 font-extrabold text-gray-400 uppercase tracking-wider text-[11px] w-1/4">Nama</th>
-                                <th class="py-5 px-6 font-extrabold text-gray-400 uppercase tracking-wider text-[11px] w-1/3">Email</th>
-                                <th class="py-5 px-6 font-extrabold text-gray-400 uppercase tracking-wider text-[11px] w-32">Role</th>
-                                <th class="py-5 px-6 font-extrabold text-gray-400 uppercase tracking-wider text-[11px] text-center w-32">Aksi</th>
+                                <th class="py-5 px-6 font-extrabold text-gray-400 uppercase tracking-wider text-[11px] w-1/3">Email & Info Wilayah</th>
+                                <th class="py-5 px-6 font-extrabold text-gray-400 uppercase tracking-wider text-[11px] w-40">Role & Status Shift</th>
+                                <th class="py-5 px-6 font-extrabold text-gray-400 uppercase tracking-wider text-[11px] text-center w-64">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($users as $user)
+                            @forelse ($users as $user)
                                 <tr class="border-b border-gray-50 hover:bg-[#f8f9fa] transition-colors group">
                                     <td class="py-4 px-6 text-gray-400 font-bold text-[13px]">#{{ $user->id }}</td>
                                     <td class="py-4 px-6 text-[#111827] font-extrabold text-[15px]">{{ $user->name }}</td>
-                                    <td class="py-4 px-6 text-gray-500 font-medium text-[14px]">{{ $user->email }}</td>
+                                    <td class="py-4 px-6">
+                                        <div class="text-gray-500 font-medium text-[14px]">{{ $user->email }}</div>
+                                        @if($user->role == 'pelanggan' && $user->kecamatan)
+                                            <div class="text-[11px] text-gray-400 mt-1 font-bold">Domisili: {{ $user->kecamatan }}</div>
+                                        @elseif($user->role == 'teknisi' && $user->kecamatan_tugas)
+                                            <div class="text-[11px] text-blue-500 mt-1 font-bold">Area Tugas: {{ $user->kecamatan_tugas }}</div>
+                                        @endif
+                                    </td>
                                     <td class="py-4 px-6">
                                         @php
                                             $role = strtolower($user->role);
                                         @endphp
 
                                         @if($role == 'teknisi')
-                                            <span class="inline-flex items-center rounded-full bg-[#334155] px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">Teknisi</span>
-                                        @elseif($role == 'admin')
-                                            <span class="inline-flex items-center rounded-full bg-red-500 px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">Admin</span>
-                                        @elseif($role == 'pimpinan')
-                                            <span class="inline-flex items-center rounded-full bg-blue-500 px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">Pimpinan</span>
+                                            <div class="flex flex-col gap-1 items-start">
+                                                <span class="inline-flex items-center rounded-full bg-[#334155] px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">Teknisi</span>
+                                                @if($user->hari_libur)
+                                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-red-50 text-red-600 border border-red-100">
+                                                        Libur: {{ $user->hari_libur }}
+                                                    </span>
+                                                @else
+                                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-100">
+                                                        Full Shift
+                                                    </span>
+                                                @endif
+                                            </div>
                                         @else
                                             <span class="inline-flex items-center rounded-full bg-[#10b981] px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">Pelanggan</span>
                                         @endif
                                     </td>
                                     <td class="py-4 px-6 text-center">
-                                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline-block m-0">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')"
-                                                class="inline-flex items-center justify-center rounded-full bg-red-50 text-red-600 hover:bg-[#ef233c] hover:text-white px-5 py-2 text-[12px] font-bold transition-colors">
-                                                Hapus
-                                            </button>
-                                        </form>
+                                        <div class="flex items-center justify-center gap-2">
+                                            @if($role == 'teknisi')
+                                                <form action="{{ route('admin.users.update-hari-libur', $user->id) }}" method="POST" class="inline-block m-0">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <select name="hari_libur" onchange="this.form.submit()" class="rounded-lg border-gray-200 py-1.5 px-2 text-[11px] font-bold text-gray-700 bg-white shadow-sm focus:border-red-500 focus:ring-red-500 cursor-pointer">
+                                                        <option value="">-- Set Libur --</option>
+                                                        @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $hari)
+                                                            <option value="{{ $hari }}" {{ $user->hari_libur == $hari ? 'selected' : '' }}>Libur: {{ $hari }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </form>
+                                            @endif
+
+                                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline-block m-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')"
+                                                    class="inline-flex items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-[#ef233c] hover:text-white px-3 py-1.5 text-[11px] font-bold transition-colors border border-red-100">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="py-12 px-6 text-center">
+                                        <div class="flex flex-col items-center justify-center text-gray-400">
+                                            <svg class="w-12 h-12 mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                            </svg>
+                                            <p class="text-sm font-bold text-gray-500">Tidak ada data pengguna yang ditemukan.</p>
+                                            <p class="text-xs mt-1">Coba sesuaikan ulang kata kunci pencarian atau filter Anda.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
 
+            {{-- ================= MODAL TAMBAH AKUN ================= --}}
             <div x-show="openModal" class="relative z-50 font-jakarta" aria-labelledby="modal-title" role="dialog" aria-modal="true" x-cloak style="display: none;">
                 <div x-show="openModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"></div>
                 <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -147,22 +218,49 @@
                                                 <option value="teknisi">Teknisi</option>
                                             </select>
                                         </div>
-                                        <div class="md:col-span-2">
+
+                                        {{-- Row ke-3: No Telepon dan (Dropdown Kecamatan Otomatis) --}}
+                                        <div>
                                             <label class="block text-[13px] font-extrabold text-gray-700 uppercase tracking-wide">No. Telepon</label>
                                             <input type="text" name="no_telepon" class="mt-2 block w-full rounded-2xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-[#ef233c] sm:text-sm font-medium transition-all bg-[#f8f9fa] hover:bg-white">
                                         </div>
+
+                                        <div>
+                                            {{-- Muncul khusus untuk Pelanggan --}}
+                                            <div id="div-kecamatan" style="display: none;">
+                                                <label class="block text-[13px] font-extrabold text-gray-700 uppercase tracking-wide">Domisili Kecamatan</label>
+                                                <select name="kecamatan" id="select_kecamatan" class="mt-2 block w-full rounded-2xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-[#ef233c] bg-[#f8f9fa] hover:bg-white transition-all">
+                                                    <option value="">Pilih Kecamatan...</option>
+                                                    <option value="Tanggul">Tanggul</option>
+                                                    <option value="Jatiroto">Jatiroto</option>
+                                                    <option value="Klakah">Klakah</option>
+                                                </select>
+                                            </div>
+
+                                            {{-- Muncul khusus untuk Teknisi --}}
+                                            <div id="div-kecamatan-tugas" style="display: none;">
+                                                <label class="block text-[13px] font-extrabold text-gray-700 uppercase tracking-wide">Wilayah Tugas (Kecamatan)</label>
+                                                <select name="kecamatan_tugas" class="mt-2 block w-full rounded-2xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-[#ef233c] bg-[#f8f9fa] hover:bg-white transition-all">
+                                                    <option value="">Pilih Area Tugas...</option>
+                                                    <option value="Tanggul">Tanggul</option>
+                                                    <option value="Jatiroto">Jatiroto</option>
+                                                    <option value="Klakah">Klakah</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                         
+                                        {{-- Informasi Lokasi Peta (Hanya untuk Pelanggan) --}}
                                         <div id="lokasi-pelanggan" class="md:col-span-2 pt-2">
                                             <div class="rounded-3xl bg-[#f8f9fa] p-6 border border-gray-100">
                                                 <h4 class="text-[15px] font-extrabold text-[#111827] mb-5 flex items-center gap-2">
                                                     <div class="bg-red-100 text-[#ef233c] p-2 rounded-xl">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                                     </div>
-                                                    Informasi Lokasi Pelanggan
+                                                    Informasi Titik Lokasi Peta
                                                 </h4>
                                                 
                                                 <label class="block text-[12px] font-extrabold text-gray-600 uppercase tracking-wide mb-2">Alamat Lengkap</label>
-                                                <input type="text" id="alamat_lengkap" name="alamat_lengkap" class="block w-full rounded-2xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-[#ef233c] sm:text-sm font-medium mb-6 bg-white" placeholder="Tandai di peta untuk mengisi otomatis...">
+                                                <input type="text" id="alamat_lengkap" name="alamat_lengkap" class="block w-full rounded-2xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-[#ef233c] sm:text-sm font-medium mb-6 bg-white" placeholder="Tandai di peta atau ketik untuk mencari otomatis...">
                                                 
                                                 <label class="block text-[12px] font-extrabold text-gray-600 uppercase tracking-wide mb-3">Tandai Lokasi di Peta</label>
                                                 <div id="map" style="height:260px;width:100%;" class="rounded-2xl ring-1 ring-gray-200 shadow-inner z-0 relative mb-5"></div>
@@ -197,23 +295,60 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const roleSelect = document.getElementById('role');
-            const lokasiBox = document.getElementById('lokasi-pelanggan');
-            const alamatInput = document.getElementById('alamat_lengkap');
-            let map, marker;
-            
-            function toggleLokasi() {
-                if (roleSelect.value === 'pelanggan') {
-                    lokasiBox.style.display = 'block';
-                    setTimeout(() => { if (map) map.invalidateSize(); }, 100);
-                } else {
-                    lokasiBox.style.display = 'none';
+            // ================= LOGIKA AUTO SEARCH =================
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                let delayTimer;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(delayTimer);
+                    delayTimer = setTimeout(function() {
+                        searchInput.closest('form').submit();
+                    }, 500); 
+                });
+
+                if (searchInput.value !== '') {
+                    searchInput.focus();
+                    const textLength = searchInput.value.length;
+                    searchInput.setSelectionRange(textLength, textLength);
                 }
             }
-            toggleLokasi();
-            roleSelect.addEventListener('change', toggleLokasi);
 
-            // Default coordinate set (e.g., Lumajang area)
+            // ================= LOGIKA FORM DINAMIS (ROLE) =================
+            const roleSelect = document.getElementById('role');
+            const lokasiBox = document.getElementById('lokasi-pelanggan');
+            const divKecamatan = document.getElementById('div-kecamatan');
+            const divKecamatanTugas = document.getElementById('div-kecamatan-tugas');
+            
+            function toggleRoleFields() {
+                if (roleSelect.value === 'pelanggan') {
+                    // Jika Pelanggan: Tampilkan Map dan Input Domisili Kecamatan
+                    lokasiBox.style.display = 'block';
+                    divKecamatan.style.display = 'block';
+                    divKecamatanTugas.style.display = 'none';
+                    setTimeout(() => { if (map) map.invalidateSize(); }, 100);
+                } else if (roleSelect.value === 'teknisi') {
+                    // Jika Teknisi: Sembunyikan Map, Tampilkan Input Wilayah Tugas Kecamatan
+                    lokasiBox.style.display = 'none';
+                    divKecamatan.style.display = 'none';
+                    divKecamatanTugas.style.display = 'block';
+                } else {
+                    lokasiBox.style.display = 'none';
+                    divKecamatan.style.display = 'none';
+                    divKecamatanTugas.style.display = 'none';
+                }
+            }
+            
+            // Panggil fungsi saat halaman dimuat dan saat role diubah
+            toggleRoleFields();
+            roleSelect.addEventListener('change', toggleRoleFields);
+
+            // ================= LOGIKA MAP LEAFLET =================
+            const alamatInput = document.getElementById('alamat_lengkap');
+            const latInput = document.getElementById('latitude');
+            const lngInput = document.getElementById('longitude');
+            let map, marker;
+            
+            // Default Map: Lumajang
             let defaultLat = -8.1335;
             let defaultLng = 113.2248;
 
@@ -221,19 +356,19 @@
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
             marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
             
-            document.getElementById('latitude').value = defaultLat;
-            document.getElementById('longitude').value = defaultLng;
+            if(!latInput.value) {
+                latInput.value = defaultLat;
+                lngInput.value = defaultLng;
+            }
 
-            // Fungsi Reverse Geocoding menggunakan API Nominatim (Gratis OpenStreetMap)
+            // Reverse Geocoding
             async function fetchAddress(lat, lng) {
                 alamatInput.value = "Memuat alamat otomatis..."; 
                 try {
-                    // API Call ke Nominatim
                     const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
                     const data = await response.json();
-                    
                     if (data && data.display_name) {
-                        alamatInput.value = data.display_name; // Set response string ke input form
+                        alamatInput.value = data.display_name;
                     } else {
                         alamatInput.value = "Alamat tidak ditemukan.";
                     }
@@ -243,20 +378,48 @@
                 }
             }
 
-            // Saat marker selesai di-drag
             marker.on('dragend', function() {
                 const pos = marker.getLatLng();
-                document.getElementById('latitude').value = pos.lat.toFixed(6);
-                document.getElementById('longitude').value = pos.lng.toFixed(6);
-                fetchAddress(pos.lat, pos.lng); // Memanggil fetchAddress
+                latInput.value = pos.lat.toFixed(6);
+                lngInput.value = pos.lng.toFixed(6);
+                fetchAddress(pos.lat, pos.lng);
             });
 
-            // Saat peta diklik
             map.on('click', function(e) {
                 marker.setLatLng(e.latlng);
-                document.getElementById('latitude').value = e.latlng.lat.toFixed(6);
-                document.getElementById('longitude').value = e.latlng.lng.toFixed(6);
-                fetchAddress(e.latlng.lat, e.latlng.lng); // Memanggil fetchAddress
+                latInput.value = e.latlng.lat.toFixed(6);
+                lngInput.value = e.latlng.lng.toFixed(6);
+                fetchAddress(e.latlng.lat, e.latlng.lng);
+            });
+
+            // Forward Geocoding
+            let typingMapTimer;
+            alamatInput.addEventListener('input', function() {
+                clearTimeout(typingMapTimer);
+                const queryAddress = this.value;
+                if (queryAddress.length > 5) {
+                    latInput.value = "Mencari...";
+                    lngInput.value = "Mencari...";
+                    typingMapTimer = setTimeout(async function() {
+                        try {
+                            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(queryAddress)}&limit=1`);
+                            const data = await response.json();
+                            if (data && data.length > 0) {
+                                const foundLat = parseFloat(data[0].lat);
+                                const foundLng = parseFloat(data[0].lon);
+                                map.setView([foundLat, foundLng], 16);
+                                marker.setLatLng([foundLat, foundLng]);
+                                latInput.value = foundLat.toFixed(6);
+                                lngInput.value = foundLng.toFixed(6);
+                            } else {
+                                latInput.value = "Lokasi tidak ditemukan";
+                                lngInput.value = "Lokasi tidak ditemukan";
+                            }
+                        } catch (error) {
+                            console.error("Gagal mencari koordinat:", error);
+                        }
+                    }, 1000); 
+                }
             });
 
             window.addEventListener('resize', function() {
