@@ -12,7 +12,11 @@ export default defineConfig({
     server: {
         host: '0.0.0.0',
         hmr: {
+<<<<<<< HEAD
             host: '192.168.7.176' // Menggunakan IP laptop Anda
+=======
+            host: '192.168.7.147' // Menggunakan IP laptop Anda
+>>>>>>> 940423174aed46c8bd519e5cb0c9bb49263603a2
         }
     }
 });

@@ -13,75 +13,56 @@ class TeknisiController extends Controller
     {
         $teknisiId = Auth::id();
 
-        // 1. Tiket yang SIAP DIAMBIL (Sudah divalidasi admin, belum ada teknisinya)
-        $tiketTersedia = Tiket::with('pelanggan')
-            ->where('status', 'diproses')
-            ->whereNull('teknisi_id')
-            ->orderBy('created_at', 'asc')
-            ->get();
-
-        // 2. Tiket yang SEDANG DIKERJAKAN oleh teknisi yang sedang login
+        // 1. HANYA mengambil tiket yang SEDANG DIKERJAKAN (yang sudah ditunjuk oleh Admin)
         $tiketSaya = Tiket::with('pelanggan')
             ->where('teknisi_id', $teknisiId)
             ->where('status', 'diproses')
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('teknisi-dashboard', compact('tiketTersedia', 'tiketSaya'));
+        // 2. Menghitung total tiket yang SUDAH SELESAI dikerjakan oleh teknisi ini (untuk statistik dashboard)
+        $totalSelesai = Tiket::where('teknisi_id', $teknisiId)
+            ->where('status', 'selesai')
+            ->count();
+
+        return view('teknisi-dashboard', compact('tiketSaya', 'totalSelesai'));
     }
 
-    // Fungsi untuk mengambil tiket
-    public function ambilTiket($id)
+    // Fungsi utama untuk menyelesaikan tugas wajib dengan foto bukti lapangan
+    public function selesaikanTugas(Request $request, $id)
     {
-        $tiket = Tiket::findOrFail($id);
+        $request->validate([
+            // Validasi file maksimal 5MB aman untuk jepretan kamera HP resolusi tinggi
+            'foto_bukti' => 'required|image|mimes:jpeg,png,jpg|max:5120', 
+        ]);
 
-        // Validasi ganda: Pastikan tiket benar-benar belum diambil orang lain
-        if ($tiket->teknisi_id !== null) {
-            return redirect()->route('teknisi.dashboard')->with('error', 'Maaf, tiket ini baru saja diambil oleh teknisi lain!');
-        }
-
-        // Masukkan ID teknisi yang sedang login ke tiket ini
-        $tiket->teknisi_id = Auth::id();
-        $tiket->save();
-
-        return redirect()->route('teknisi.dashboard')->with('success', 'Berhasil! Tiket masuk ke daftar tugas Anda.');
-    }
-    
-    // Fungsi untuk menyelesaikan tiket
-    public function selesaikanTiket($id)
-    {
-        // Cari tiket yang ID-nya cocok dan pastikan tiket ini memang dipegang oleh teknisi yang sedang login
+        // Cari tiket dan pastikan tiket ini memang milik teknisi yang sedang login
         $tiket = Tiket::where('id', $id)
                       ->where('teknisi_id', Auth::id())
                       ->firstOrFail();
 
-        // Ubah status menjadi selesai
+        // Proses upload foto bukti ke dalam storage
+        if ($request->hasFile('foto_bukti')) {
+            $file = $request->file('foto_bukti');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/bukti_selesai', $filename);
+            
+            $tiket->foto_bukti = $filename;
+        }
+
+        // Ubah status tiket menjadi selesai
         $tiket->status = 'selesai';
         $tiket->save();
 
-        return redirect()->route('teknisi.dashboard')->with('success', 'Kerja bagus! Laporan telah berhasil diselesaikan.');
+        return redirect()->route('teknisi.dashboard')->with('success', 'Luar biasa! Tugas lapangan telah diselesaikan dan bukti berhasil diunggah.');
     }
 
-    public function selesaikanTugas(Request $request, $id)
-{
-    $request->validate([
-        'foto_bukti' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-    ]);
+    public function toggleStatus()
+    {
+        $user = auth()->user();
+        $user->status = ($user->status === 'libur') ? 'aktif' : 'libur';
+        $user->save();
 
-    $tiket = Tiket::findOrFail($id);
-
-    if ($request->hasFile('foto_bukti')) {
-        $file = $request->file('foto_bukti');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $file->storeAs('public/bukti_selesai', $filename);
-        
-        // Simpan nama file ke database Anda
-        $tiket->foto_bukti = $filename;
+        return back()->with('success', 'Status ketersediaan Anda berhasil diperbarui.');
     }
-
-    $tiket->status = 'selesai';
-    $tiket->save();
-
-    return redirect()->back()->with('success', 'Tugas berhasil diselesaikan beserta foto bukti!');
-}
 }

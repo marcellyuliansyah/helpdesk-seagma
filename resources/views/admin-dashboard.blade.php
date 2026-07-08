@@ -257,23 +257,55 @@
 
                 {{-- TABEL PENGADUAN --}}
                 <div class="bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden" x-data="{ search: '', statusFilter: 'all' }">
-                    <div class="px-8 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700">
-                        <h3 class="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-white font-tegas">
-                            <svg class="w-4 h-4 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
-                            </svg>
-                            Daftar Pengaduan Jaringan
-                        </h3>
-                        
-                        {{-- TOMBOL CETAK LAPORAN (SUDAH DIPERBAIKI) --}}
-                        <a href="{{ route('admin.laporan.pdf') }}"
-                            class="inline-flex items-center justify-center px-4 py-2 bg-slate-700/50 hover:bg-red-600 border border-slate-600 hover:border-red-500 text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-all duration-300 shadow-sm">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
-                            Cetak Laporan PDF
-                        </a>
-                    </div>
+    <div class="px-8 py-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700">
+        
+        {{-- JUDUL TABEL --}}
+        <h3 class="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-white font-tegas whitespace-nowrap">
+            <svg class="w-4 h-4 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+            </svg>
+            Daftar Pengaduan Jaringan
+        </h3>
+        
+        {{-- FORM CETAK LAPORAN --}}
+        <form action="{{ route('admin.cetak.pdf') }}" method="GET" class="flex flex-wrap items-center gap-3">
+            
+            {{-- Dropdown Bulan (Background Putih, Teks Gelap) --}}
+            <select name="bulan" class="bg-white border border-slate-300 text-slate-800 text-sm font-medium rounded-xl px-4 py-2 focus:ring-red-500 focus:border-red-500 outline-none shadow-sm cursor-pointer transition-all w-32 md:w-40">
+                <option value="">Pilih Bulan</option>
+                <option value="1">Januari</option>
+                <option value="2">Februari</option>
+                <option value="3">Maret</option>
+                <option value="4">April</option>
+                <option value="5">Mei</option>
+                <option value="6">Juni</option>
+                <option value="7">Juli</option>
+                <option value="8">Agustus</option>
+                <option value="9">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+            </select>
+            
+            {{-- Dropdown Tahun (Background Putih, Teks Gelap) --}}
+            <select name="tahun" class="bg-white border border-slate-300 text-slate-800 text-sm font-medium rounded-xl px-4 py-2 focus:ring-red-500 focus:border-red-500 outline-none shadow-sm cursor-pointer transition-all w-32 md:w-40">
+                <option value="">Pilih Tahun</option>
+                @foreach(range(date('Y'), date('Y') - 5) as $year)
+                    <option value="{{ $year }}">{{ $year }}</option>
+                @endforeach
+            </select>
+
+            {{-- Tombol Submit --}}
+            <button type="submit"
+                class="inline-flex items-center justify-center px-4 py-2 bg-red-600 hover:bg-red-500 border border-transparent text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-all duration-300 shadow-sm cursor-pointer">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                Cetak PDF
+            </button>
+            
+        </form>
+    </div>
 
                     <div class="px-8 py-4 bg-slate-50/70 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div class="relative w-full sm:w-72">

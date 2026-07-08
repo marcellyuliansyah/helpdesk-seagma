@@ -59,10 +59,17 @@
             letter-spacing: 0.5px;
         }
 
+        .report-periode {
+            font-size: 11px;
+            font-weight: bold;
+            color: #4a5568;
+            margin-top: 4px;
+        }
+
         .report-date {
             font-size: 10px;
             color: #718096;
-            margin-top: 5px;
+            margin-top: 3px;
         }
 
         /* Pembersihan Float CSS */
@@ -150,7 +157,8 @@
         </div>
         <div class="report-data">
             <h2 class="report-title">Rekapitulasi Pengaduan</h2>
-            <div class="report-date">Cetak: {{ \Carbon\Carbon::now()->format('d M Y - H:i') }} WIB</div>
+            <div class="report-periode">Periode: {{ $periode ?? 'Semua Waktu' }}</div>
+            <div class="report-date">Cetak: {{ \Carbon\Carbon::now()->timezone('Asia/Jakarta')->format('d M Y - H:i') }} WIB</div>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -164,10 +172,11 @@
                 <th width="28%">Deskripsi Masalah</th>
                 <th width="16%">Teknisi Lapangan</th>
                 <th width="10%" class="text-center">Status</th>
-                <th width="16%" class="text-center">Bukti Foto</th> </tr>
+                <th width="16%" class="text-center">Bukti Foto</th>
+            </tr>
         </thead>
         <tbody>
-            @foreach ($tikets as $index => $tiket)
+            @forelse ($tikets as $index => $tiket)
                 <tr>
                     <td class="text-center font-mono" style="padding-top: 14px;">{{ $index + 1 }}</td>
                     
@@ -217,7 +226,13 @@
                         @endif
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="7" class="text-center" style="padding: 20px; font-style: italic; color: #718096;">
+                        Tidak ada pengaduan pada periode ini.
+                    </td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 

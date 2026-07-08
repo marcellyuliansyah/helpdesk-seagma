@@ -37,7 +37,7 @@
 
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
                     <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 bg-[#dc2626] rounded-2xl flex items-center justify-center text-white shadow-[0_8px_20px_-6px_rgba(220,38,38,0.4.5)] shrink-0">
+                        <div class="w-14 h-14 bg-[#dc2626] rounded-2xl flex items-center justify-center text-white shadow-[0_8px_20px_-6px_rgba(220,38,38,0.45)] shrink-0">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
@@ -92,7 +92,7 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 border-t border-slate-50">
                                     <div>
                                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 font-tegas">Dilaporkan Pada</p>
-                                        <p class="text-sm font-semibold text-slate-800">{{ $tiket->created_at->format('d M Y -.H:i') }} WIB</p>
+                                        <p class="text-sm font-semibold text-slate-800">{{ $tiket->created_at->format('d M Y - H:i') }} WIB</p>
                                     </div>
                                     <div>
                                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 font-tegas">ID Pengguna</p>
@@ -158,7 +158,7 @@
                                 <p class="text-xs text-slate-500 mt-4 text-center font-medium">Foto diunggah pada saat status laporan diselesaikan.</p>
                             </div>
                         @endif
-                        </div>
+                    </div>
 
                     <div class="space-y-8">
                         
@@ -186,38 +186,77 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
-                                Aksi Administrator
+                                Kendali Distribusi Tugas (Dispatching)
                             </h4>
 
-                            <form action="{{ route('admin.pengaduan.updateStatus', $tiket->id) }}" method="POST" class="space-y-5">
-                                @csrf
-                                @method('PATCH')
+                            @if($tiket->status !== 'selesai')
+                                <form action="{{ route('admin.pengaduan.updateStatus', $tiket->id) }}" method="POST" class="space-y-5">
+                                    @csrf
+                                    @method('PATCH')
 
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2 font-tegas">Pilih Teknisi Lapangan</label>
-                                    <select name="teknisi_id" class="block w-full rounded-xl border-slate-200 py-3 px-4 text-sm bg-white focus:border-[#111c2a] focus:ring-[#111c2a] transition-all duration-300">
-                                        <option value="">-- Belum Ditugaskan --</option>
-                                        @foreach ($teknisis as $teknisi)
-                                            <option value="{{ $teknisi->id }}" {{ $tiket->teknisi_id == $teknisi->id ? 'selected' : '' }}>
-                                                {{ $teknisi->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <div class="mb-4">
+                                        {{-- MODIFIKASI DISINI: Menghindari error jika $tiket->pelanggan / user bernilai null --}}
+                                        <label class="block text-sm font-bold text-gray-700">Tugaskan Teknisi (Wilayah: {{ $tiket->pelanggan?->kecamatan ?? 'Tidak Diketahui' }})</label>
+                                        
+                                        {{-- Notifikasi Tambahan Jika di Luar Jam Kerja --}}
+                                        @if(isset($isLuarJamKerja) && $isLuarJamKerja && !$tiket->teknisi_id)
+                                            <div class="mb-2 p-3 bg-red-50 rounded-xl border border-red-100 text-[12px] font-bold text-red-600 flex items-center gap-2">
+                                                <span>Sistem Terkunci: Saat ini di luar jam kerja operasional (08:00 - 16:00).</span>
+                                            </div>
+                                        @endif
+
+                                        <select name="teknisi_id" class="block w-full rounded-xl border-slate-200 py-3 px-4 text-sm bg-white focus:border-[#111c2a] focus:ring-[#111c2a] transition-all duration-300">
+                                            <option value="">-- Belum Ditugaskan --</option>
+                                            @if(isset($teknisiTersedia) && count($teknisiTersedia) > 0)
+                                                @foreach($teknisiTersedia as $tek)
+                                                    <option value="{{ $tek->id }}" {{ $tiket->teknisi_id == $tek->id ? 'selected' : '' }}>
+                                                        {{ $tek->name }} (Tugas: {{ $tek->kecamatan_tugas }})
+                                                    </option>
+                                                @endforeach
+                                            @else
+                                                @forelse ($teknisis ?? [] as $teknisi)
+                                                    <option value="{{ $teknisi->id }}" {{ $tiket->teknisi_id == $teknisi->id ? 'selected' : '' }} class="text-slate-900 font-semibold">
+                                                        {{ $teknisi->name }} 
+                                                        @if($tiket->teknisi_id == $teknisi->id)
+                                                            - (Saat Ini Ditugaskan)
+                                                        @else
+                                                            - (Siaga / Tersedia)
+                                                        @endif
+                                                    </option>
+                                                @empty
+                                                    <option value="" disabled class="text-red-500 bg-red-50">❌ Tidak ada teknisi yang tersedia saat ini</option>
+                                                @endforelse
+                                            @endif
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2 font-tegas">Update Status Berkas</label>
+                                        <select name="status" class="block w-full rounded-xl border-slate-200 py-3 px-4 text-sm bg-white focus:border-[#111c2a] focus:ring-[#111c2a] transition-all duration-300">
+                                            <option value="menunggu verifikasi" {{ $tiket->status == 'menunggu verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
+                                            <option value="diproses" {{ $tiket->status == 'diproses' ? 'selected' : '' }}>Dalam Proses</option>
+                                            <option value="selesai" {{ $tiket->status == 'selesai' ? 'selected' : '' }}>Selesai Diperbaiki</option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" onclick="return confirm('Simpan perubahan data pendelegasian ini?');" class="w-full bg-[#111c2a] text-white rounded-full py-3.5 mt-4 text-xs font-bold uppercase tracking-wider hover:bg-slate-800 hover:shadow-lg focus:ring-4 focus:ring-slate-200 transition-all duration-300 font-tegas">
+                                        Simpan Perubahan Berkas
+                                    </button>
+                                </form>
+                            @else
+                                {{-- Kondisi Jika Tiket Selesai Diperbaiki --}}
+                                <div class="bg-emerald-50 border border-emerald-100 p-5 rounded-2xl text-center">
+                                    <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <h5 class="text-xs font-bold text-slate-900 uppercase font-tegas tracking-wide">Status Selesai</h5>
+                                    <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                        Gangguan ini telah berhasil diperbaiki oleh teknisi lapangan <b>{{ $tiket->teknisi->name ?? '-' }}</b> dan berkas telah dikunci.
+                                    </p>
                                 </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2 font-tegas">Update Status Berkas</label>
-                                    <select name="status" class="block w-full rounded-xl border-slate-200 py-3 px-4 text-sm bg-white focus:border-[#111c2a] focus:ring-[#111c2a] transition-all duration-300">
-                                        <option value="menunggu verifikasi" {{ $tiket->status == 'menunggu verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
-                                        <option value="diproses" {{ $tiket->status == 'diproses' ? 'selected' : '' }}>Dalam Proses</option>
-                                        <option value="selesai" {{ $tiket->status == 'selesai' ? 'selected' : '' }}>Selesai Diperbaiki</option>
-                                    </select>
-                                </div>
-
-                                <button type="submit" class="w-full bg-[#111c2a] text-white rounded-full py-3.5 mt-4 text-xs font-bold uppercase tracking-wider hover:bg-slate-800 hover:shadow-lg focus:ring-4 focus:ring-slate-200 transition-all duration-300 font-tegas">
-                                    Simpan Perubahan Berkas
-                                </button>
-                            </form>
+                            @endif
                         </div>
                     </div>
 
@@ -244,7 +283,7 @@
         }).addTo(map);
 
         var marker = L.marker([lat, lng]).addTo(map)
-            .bindPopup("<div class='text-center'><b class='font-tegas text-sm'>Lokasi Titik</b><br><span class='text-xs text-slate-600'>{{ $tiket->pelanggan->name }}</span></div>")
+            .bindPopup("<div class='text-center'><b class='font-tegas text-sm'>Lokasi Titik</b><br><span class='text-xs text-slate-600'>{{ $tiket->pelanggan?->name ?? 'Pelanggan' }}</span></div>")
             .openPopup();
     </script>
 </x-app-layout>
