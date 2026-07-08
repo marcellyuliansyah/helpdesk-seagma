@@ -20,6 +20,10 @@
             background-color: #ffffff;
         }
 
+        [x-cloak] {
+            display: none !important;
+        }
+
         .bg-grid-pattern {
             background-image:
                 linear-gradient(to right, #f8f9fa 1px, transparent 1px),
@@ -62,7 +66,7 @@
     </div>
 
     <div class="relative z-10 min-h-screen">
-        
+
         @include('layouts.navigation')
 
         @if (isset($header))
