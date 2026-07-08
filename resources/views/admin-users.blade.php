@@ -47,7 +47,7 @@
                         <h2 class="text-[1.75rem] font-extrabold text-[#111827] tracking-tight leading-tight">
                             Manajemen Pengguna
                         </h2>
-                        <p class="text-[0.95rem] font-medium text-gray-500 mt-1">Kelola daftar pelanggan dan teknisi di sistem Anda.</p>
+                        <p class="text-[0.95rem] font-medium text-gray-500 mt-1">Kelola daftar pelanggan, teknisi, dan pimpinan di sistem Anda.</p>
                     </div>
                 </div>
                 
@@ -132,6 +132,8 @@
                                                     </span>
                                                 @endif
                                             </div>
+                                        @elseif($role == 'pimpinan')
+                                            <span class="inline-flex items-center rounded-full bg-blue-500 px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">Pimpinan</span>
                                         @else
                                             <span class="inline-flex items-center rounded-full bg-[#10b981] px-4 py-1.5 text-[11px] font-extrabold text-white tracking-widest uppercase shadow-sm">Pelanggan</span>
                                         @endif
@@ -332,6 +334,7 @@
                     divKecamatan.style.display = 'none';
                     divKecamatanTugas.style.display = 'block';
                 } else {
+                    // Jika Pimpinan (atau opsi lain): Sembunyikan Map & Wilayah
                     lokasiBox.style.display = 'none';
                     divKecamatan.style.display = 'none';
                     divKecamatanTugas.style.display = 'none';

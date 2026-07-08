@@ -57,7 +57,7 @@ Route::middleware(['auth', 'admin', 'verified', 'no-cache'])->group(function () 
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users'); // Menangani Tampilan, Pencarian, & Filter
     Route::post('/admin/users', [AdminController::class, 'store'])->name('admin.users.store'); // Disinkronkan ke method 'store'
     Route::get('/admin/users/{id}/edit', [AdminController::class, 'edit'])->name('admin.users.edit');
-    Route::delete('/admin/users/{id}', [AdminController::class, 'destroy'])->name('admin.users.destroy'); // Disinkronkan ke method 'destroy'
+    Route::delete('/admin/users/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy'); // Disinkronkan ke method 'destroy'
     
     // Kendali Mutlak Manajemen Shift/Libur Teknisi oleh Admin
     Route::patch('/admin/users/{id}/update-hari-libur', [AdminController::class, 'updateHariLibur'])->name('admin.users.update-hari-libur');

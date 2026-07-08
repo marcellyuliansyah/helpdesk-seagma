@@ -201,7 +201,7 @@
                                         {{-- Notifikasi Tambahan Jika di Luar Jam Kerja --}}
                                         @if(isset($isLuarJamKerja) && $isLuarJamKerja && !$tiket->teknisi_id)
                                             <div class="mb-2 p-3 bg-red-50 rounded-xl border border-red-100 text-[12px] font-bold text-red-600 flex items-center gap-2">
-                                                <span>Sistem Terkunci: Saat ini di luar jam kerja operasional (08:00 - 16:00).</span>
+                                                <span>Sistem Terkunci: Saat ini di luar jam kerja operasional (07:00 - 17:00).</span>
                                             </div>
                                         @endif
 

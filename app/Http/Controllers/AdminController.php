@@ -51,8 +51,8 @@ class AdminController extends Controller
         // 1. Deteksi Otomatis Hari dan Jam Kerja
         $hariIni = \Carbon\Carbon::now()->locale('id')->isoFormat('dddd');
         $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->format('H:i');
-        $jamMasuk = '00:00';
-        $jamPulang = '23:59';
+        $jamMasuk = '07:00';
+        $jamPulang = '17:00';
         
         $isLuarJamKerja = ($jamSekarang < $jamMasuk || $jamSekarang > $jamPulang);
 
